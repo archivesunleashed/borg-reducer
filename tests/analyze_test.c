@@ -6,48 +6,97 @@
 #include "unity.h"
 #include <math.h>
 void setUp(void) {
-  calc_degree(&g, 'd');
-  
-  
-  
-  calc_betweenness(&g);
-  
-  
-  
-  calc_authority(&g);
-  
 }
+
 void tearDown(void) {
-  
-  
-  
 }
 
 void TEST_DEGREE_ALGORITHM() {
+  calc_degree(&g, 'd');
   igraph_vector_t deg;
   igraph_vector_init(&deg, 0);
   VANV(&g, "Degree", &deg);
-  TEST_ASSERT_EQUAL_FLOAT(VECTOR(deg)[0], 1.0);
-  TEST_ASSERT_EQUAL_FLOAT(VECTOR(deg)[10], 1.0);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[0])/10, 1.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[10])/10, 1.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[100])/10, 2.00);
+  igraph_vector_destroy(&deg);
+}
+
+void TEST_INDEGREE_ALGORITHM() {
+  calc_degree(&g, 'i');
+  igraph_vector_t deg;
+  igraph_vector_init(&deg, 0);
+  VANV(&g, "Indegree", &deg);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[0])/10, 1.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[10])/10, 1.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[100])/10, 2.00);
+  igraph_vector_destroy(&deg);
+}
+
+void TEST_OUTDEGREE_ALGORITHM() {
+  calc_degree(&g, 'o');
+  igraph_vector_t deg;
+  igraph_vector_init(&deg, 0);
+  VANV(&g, "Outdegree", &deg);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[0])/10, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[10])/10, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(deg)[100])/10, 0.00);
   igraph_vector_destroy(&deg);
 }
 
 void TEST_BETWEENNESS_ALGORITHM() {
+  calc_betweenness(&g);
   igraph_vector_t bet;
   igraph_vector_init(&bet, 0);
   VANV(&g, "Betweenness", &bet);
-  TEST_ASSERT_EQUAL_FLOAT(VECTOR(bet)[0], 0.0);
-  TEST_ASSERT_EQUAL_FLOAT(VECTOR(bet)[10], 0.0);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(bet)[0])/100000, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(bet)[10])/100000, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(bet)[100])/100000, 0.00);
   igraph_vector_destroy(&bet);
 }
 
 void TEST_AUTHORITY_ALGORITHM() {
+  calc_authority(&g);
   igraph_vector_t aut;
   igraph_vector_init(&aut, 0);
   VANV(&g, "Authority", &aut);
-  TEST_ASSERT_EQUAL_FLOAT(VECTOR(aut)[0], 0.0768518);
-  TEST_ASSERT_EQUAL_FLOAT(roundf(10 * VECTOR(aut)[10])/100, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(aut)[0])/100000, 0.07685);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(aut)[10])/100000, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(aut)[100])/100000, 0.08232);
   igraph_vector_destroy(&aut);
+}
+
+void TEST_HUB_ALGORITHM() {
+  calc_hub(&g);
+  igraph_vector_t hub;
+  igraph_vector_init(&hub, 0);
+  VANV(&g, "Hub", &hub);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(hub)[0])/100000, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(hub)[10])/100000, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(hub)[100])/100000, 0.00);
+  igraph_vector_destroy(&hub);
+}
+
+void TEST_EIGENVECTOR_ALGORITHM() {
+  calc_eigenvector(&g);
+  igraph_vector_t eig;
+  igraph_vector_init(&eig, 0);
+  VANV(&g, "Eigenvector", &eig);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(eig)[0])/100000, 0.0);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(eig)[10])/100000, 0.00);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(eig)[100])/100000, 0.00);
+  igraph_vector_destroy(&eig);
+}
+
+void TEST_PAGERANK_ALGORITHM() {
+  calc_pagerank(&g);
+  igraph_vector_t pr;
+  igraph_vector_init(&pr, 0);
+  VANV(&g, "PageRank", &pr);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(pr)[0])/100000, 0.00424);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(pr)[10])/100000, 0.00419);
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000 * VECTOR(pr)[100])/100000, 0.00447);
+  igraph_vector_destroy(&pr);
 }
 
 void TEST_RANKORDER() {
