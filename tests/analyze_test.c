@@ -99,6 +99,17 @@ void TEST_PAGERANK_ALGORITHM() {
   igraph_vector_destroy(&pr);
 }
 
+void TEST_MODULARITY() {
+  calc_modularity(&g);
+  igraph_vector_t mod;
+  igraph_vector_init(&mod, 0);
+  VANV(&g, "WalkTrapModularity", &mod);
+  TEST_ASSERT_EQUAL_FLOAT(VECTOR(mod)[0], 5);
+  TEST_ASSERT_EQUAL_FLOAT(VECTOR(mod)[10], 7);
+  TEST_ASSERT_EQUAL_FLOAT(VECTOR(mod)[100], 5);
+  igraph_vector_destroy(&mod);
+}
+
 void TEST_RANKORDER() {
   igraph_vector_t test, test2, ranks;
   igraph_vector_init(&test, 10);
