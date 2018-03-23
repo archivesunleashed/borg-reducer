@@ -43,6 +43,9 @@ extern void TEST_MODULARITY(void);
 extern void TEST_MEAN(void);
 extern void TEST_VARIANCE(void);
 extern void TEST_STD(void);
+extern void TEST_STDERROR(void);
+extern void TEST_TTEST(void);
+extern void TEST_TPVALUE(void);
 
 void resetTest(void);
 void resetTest(void)
@@ -73,6 +76,9 @@ int main (void) {
   RUN_TEST(TEST_MEAN, 138);
   RUN_TEST(TEST_VARIANCE, 151);
   RUN_TEST(TEST_STD,164);
+  RUN_TEST(TEST_STDERROR, 177);
+  RUN_TEST(TEST_TTEST, 190);
+  RUN_TEST(TEST_TPVALUE, 203)
   igraph_destroy(&g);
   return (UNITY_END());
 }

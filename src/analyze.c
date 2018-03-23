@@ -26,14 +26,6 @@
     what size nodes should be.
  */
 
-/** Calculates betweenness scores for the individual nodes in a graph
- 
- Betweenness is measured
- 
- @param graph - the graph for which to record the scores.
- @return 0 unless error occurs.
- */
-
 igraph_real_t mean_vector (igraph_vector_t *v1) {
   return (igraph_vector_sum(v1)/igraph_vector_size(v1));
 }
@@ -55,7 +47,161 @@ igraph_real_t std_vector(igraph_vector_t *v1) {
   return sqrt(variance_vector(v1));
 }
 
-int paired_t_test (igraph_vector_t *v1, igraph_vector_t *v2, long int result[2]) {
+igraph_real_t stderror_vector(igraph_vector_t *v1) {
+  return (std_vector(v1) / sqrt(igraph_vector_size(v1)));
+}
+          
+igraph_real_t t_stat_vector(igraph_vector_t *v1) {
+  return (mean_vector(v1)/stderror_vector(v1));
+}
+
+igraph_real_t t_test_vector(igraph_vector_t *v1, igraph_real_t df) {
+  igraph_real_t t_stat;
+  igraph_real_t pvalue;
+  t_stat = t_stat_vector(v1);
+  pvalue = (df / (t_stat * t_stat + df));
+  if ((isinf(pvalue) != 0) || (isnan(pvalue) != 0)) {
+    return 1.0;
+  }
+  if ((isinf(pvalue) != 0) || (isnan(pvalue) != 0)) {
+    return 1.0;
+  }
+  
+  const double daf = df/2;
+  /*  Purpose:
+   
+   BETAIN computes the incomplete Beta function ratio.
+   
+   Licensing:
+   
+   This code is distributed under the GNU LGPL license.
+   
+   Modified:
+   
+   05 November 2010
+   
+   Author:
+   
+   Original FORTRAN77 version by KL Majumder, GP Bhattacharjee.
+   C version by John Burkardt.
+   
+   Reference:
+   
+   KL Majumder, GP Bhattacharjee,
+   Algorithm AS 63:
+   The incomplete Beta Integral,
+   Applied Statistics,
+   Volume 22, Number 3, 1973, pages 409-411.
+   
+   Parameters:
+   https://www.jstor.org/stable/2346797?seq=1#page_scan_tab_contents
+   Input, double X, the argument, between 0 and 1.
+   
+   Input, double P, Q, the parameters, which
+   must be positive.
+   
+   Input, double BETA, the logarithm of the complete
+   beta function.
+   
+   Output, int *IFAULT, error flag.
+   0, no error.
+   nonzero, an error occurred.
+   
+   Output, double BETAIN, the value of the incomplete
+   Beta function ratio.
+   */
+
+  const double beta = lgammal(daf)+0.57236494292470009-lgammal(daf+0.5);
+  const double acu = 0.1E-14;
+  double ai;
+  double cx;
+  int indx;
+  int ns;
+  double pp;
+  double psq;
+  double qq;
+  double rx;
+  double temp;
+  double term;
+  double xx;
+  
+  //  if ault = 0;
+  //Check the input arguments.
+  if ( (daf<= 0.0)) {// || (0.5 <= 0.0 )){
+    //    *ifault = 1;
+    //    return pvalue;
+  }
+  if ( pvalue < 0.0 || 1.0 < pvalue )
+  {
+    //    *ifault = 2;
+    return pvalue;
+  }
+  /*
+   Special cases.
+   */
+  if ( pvalue == 0.0 || pvalue == 1.0 )   {
+    return pvalue;
+  }
+  psq = daf+ 0.5;
+  cx = 1.0 - pvalue;
+  
+  if ( daf< psq * pvalue )
+  {
+    xx = cx;
+    cx = pvalue;
+    pp = 0.5;
+    qq = daf;
+    indx = 1;
+  }
+  else
+  {
+    xx = pvalue;
+    pp = daf;
+    qq = 0.5;
+    indx = 0;
+  }
+  
+  term = 1.0;
+  ai = 1.0;
+  pvalue = 1.0;
+  ns = ( int ) ( qq + cx * psq );
+  /*
+   Use the Soper reduction formula.
+   */
+  rx = xx / cx;
+  temp = qq - ai;
+  if ( ns == 0 ) {
+    rx = xx;
+  }
+  for ( ; ; ) {
+    term = term * temp * rx / ( pp + ai );
+    pvalue = pvalue + term;;
+    temp = fabs ( term );
+    if ( temp <= acu && temp <= acu * pvalue ) {
+      pvalue = pvalue * exp ( pp * log ( xx )
+                           + ( qq - 1.0 ) * log ( cx ) - beta ) / pp;
+      if ( indx ) {
+        pvalue = 1.0 - pvalue;
+      }
+      break;
+    }
+    ai = ai + 1.0;
+    ns = ns - 1;
+    if ( 0 <= ns ) {
+      temp = qq - ai;
+      if ( ns == 0 )
+      {
+        rx = xx;
+      }
+    } else {
+      temp = psq;
+      psq = psq + 1.0;
+    }
+  }
+  return pvalue;
+}
+
+int paired_t_stat (igraph_vector_t *v1, igraph_vector_t *v2, long int result[2]) {
   igraph_vector_t diff;
   igraph_vector_init(&diff, igraph_vector_size(v2));
   igraph_real_t mean;
@@ -69,6 +215,14 @@ int paired_t_test (igraph_vector_t *v1, igraph_vector_t *v2, long int result[2])
   return 0;
 }
 
+  
+/** Calculates betweenness scores for the individual nodes in a graph
+   
+  Betweenness is measured
+   
+  @param graph - the graph for which to record the scores.
+  @return 0 unless error occurs.
+   */
 extern int calc_betweenness(igraph_t *graph){
   char *attr = "Betweenness";
   igraph_vector_t v;

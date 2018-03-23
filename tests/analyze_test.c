@@ -174,4 +174,43 @@ void TEST_STD() {
   igraph_vector_destroy(&test);
 }
 
+void TEST_STDERROR() {
+  igraph_vector_t test;
+  igraph_vector_init(&test, 10);
+  VECTOR(test)[0] = 10; VECTOR(test)[1] = 30; VECTOR(test)[2] = 19;
+  VECTOR(test)[3] = 6; VECTOR(test)[4] = 18; VECTOR(test)[5] = 17;
+  VECTOR(test)[6] = 21; VECTOR(test)[7] = 23; VECTOR(test)[8] = 24;
+  VECTOR(test)[9] = 33;
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000* stderror_vector(&test))/100000, 2.59251);
+  VECTOR(test)[9] = 1000;
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000*stderror_vector(&test))/100000, 98.1571);
+  igraph_vector_destroy(&test);
+}
+
+void TEST_TTEST() {
+  igraph_vector_t test;
+  igraph_vector_init(&test, 10);
+  VECTOR(test)[0] = 10; VECTOR(test)[1] = 30; VECTOR(test)[2] = 19;
+  VECTOR(test)[3] = 6; VECTOR(test)[4] = 18; VECTOR(test)[5] = 17;
+  VECTOR(test)[6] = 21; VECTOR(test)[7] = 23; VECTOR(test)[8] = 24;
+  VECTOR(test)[9] = 33;
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000* t_stat_vector(&test))/100000, 7.7531);
+  VECTOR(test)[9] = 1000;
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000* t_stat_vector(&test))/100000, 1.18993);
+  igraph_vector_destroy(&test);
+}
+
+void TEST_TPVALUE() {
+  igraph_vector_t test;
+  igraph_vector_init(&test, 10);
+  VECTOR(test)[0] = 10; VECTOR(test)[1] = 30; VECTOR(test)[2] = 19;
+  VECTOR(test)[3] = 6; VECTOR(test)[4] = 18; VECTOR(test)[5] = 17;
+  VECTOR(test)[6] = 21; VECTOR(test)[7] = 23; VECTOR(test)[8] = 24;
+  VECTOR(test)[9] = 33;
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000* t_test_vector(&test, 9))/100000, 3e-05);
+  VECTOR(test)[9] = 1000;
+  TEST_ASSERT_EQUAL_FLOAT(roundf(100000* t_test_vector(&test, 9))/100000, 0.26452);
+  igraph_vector_destroy(&test);
+}
+
 
