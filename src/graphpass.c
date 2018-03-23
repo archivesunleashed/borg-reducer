@@ -180,13 +180,16 @@ int main (int argc, char *argv[]) {
   load_graph(FILEPATH);
   free(FILEPATH);
   
-  /* TEST CODE PLS REMOVE */
+  /* TEST CODE PLS REMOVE
   igraph_t g2;
+  igraph_vector_t idRef;
+  igraph_vector_init_seq(&idRef, 0, igraph_vcount(&g)-1);
+  SETVANV(&g, "idRef", &idRef);
   analysis_all(&g);  
   igraph_copy(&g2, &g);
   rankCompare(&g, &g2, "Degree");
   
-  /* END TEST CODE */
+  END TEST CODE */
   
   /** start the filtering based on values and methods **/
   filter_graph();
@@ -196,7 +199,6 @@ int main (int argc, char *argv[]) {
   }
   else {
     printf("- NO_SAVE requested, so no output.\n\n\n");
-  }
-  
+  }  
   return 0;
 }

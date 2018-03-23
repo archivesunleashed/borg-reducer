@@ -134,6 +134,7 @@ int strip_ext(char *fname);
 int load_graph (char* filename);
 int write_graph(igraph_t *graph, char *attr);
 int produceRank(igraph_vector_t *source, igraph_vector_t *vector);
+int paired_t_stat (igraph_vector_t *v1, igraph_vector_t *v2, igraph_real_t *pv, igraph_real_t *ts);
 int calc_betweenness(igraph_t *graph);
 int calc_authority(igraph_t *graph);
 int calc_hub(igraph_t *graph);

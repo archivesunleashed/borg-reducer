@@ -210,6 +210,7 @@ int create_filtered_graph(igraph_t *graph, double cutoff, int cutsize, char* att
   push(&eigcent, GAN(&g2, "centralizationEigenvector"), attr);
   push(&pagecent, GAN(&g2, "centralizationPageRank"), attr);
   push(&reciprocity, recip, attr);
+  rankCompare(&g, &g2, "Degree");
   igraph_vector_destroy(&size);
   igraph_vector_destroy(&ideg);
   igraph_vector_destroy(&odeg);

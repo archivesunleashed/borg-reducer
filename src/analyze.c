@@ -39,7 +39,7 @@ igraph_real_t variance_vector (igraph_vector_t *v1) {
     VECTOR(squared_residuals)[i] = pow((igraph_vector_e(v1, i) - mean), 2);
   }
   variance = (igraph_vector_sum(&squared_residuals) / (igraph_vector_size(&squared_residuals) -1));
-  igraph_vector_destroy(&squared_residuals);
+  // igraph_vector_destroy(&squared_residuals);
   return variance;
 }
 
@@ -201,17 +201,19 @@ igraph_real_t t_test_vector(igraph_vector_t *v1, igraph_real_t df) {
   return pvalue;
 }
 
-int paired_t_stat (igraph_vector_t *v1, igraph_vector_t *v2, long int result[2]) {
+int paired_t_stat (igraph_vector_t *v1, igraph_vector_t *v2, igraph_real_t *pv, igraph_real_t *ts) {
   igraph_vector_t diff;
   igraph_vector_init(&diff, igraph_vector_size(v2));
-  igraph_real_t mean;
-  igraph_real_t std;
-  for (int i=0; i<igraph_vector_size(v1); i++) {
+  igraph_real_t pvalue;
+  
+  for (long int i=0; i<igraph_vector_size(v2); i++) {
+    //printf("diff %f", igraph_vector_e(v1,i) - igraph_vector_e(v2,i));
     VECTOR(diff)[i] = igraph_vector_e(v1,i) - igraph_vector_e(v2,i);
   }
-  mean = mean_vector(&diff);
-  std = std_vector(&diff);
+  *pv = t_test_vector(&diff, igraph_vector_size(&diff)-1);
+  *ts = t_stat_vector(&diff);
   // calculate t-statistic and p-value;
+  igraph_vector_destroy(&diff);
   return 0;
 }
 
