@@ -276,6 +276,8 @@ int runFilters (igraph_t *graph, int cutsize) {
  */
 
 int filter_graph() {
+  igraph_vector_t idRef;
+  igraph_vector_init_seq(&idRef, 0, igraph_vcount(&g)-1);
   float percentile;
   int cutsize;
   if (QUICKRUN == true) {
@@ -294,6 +296,7 @@ int filter_graph() {
   cutsize = round((double)NODESIZE * percentile);
   printf("Filtering the graphs by %f will reduce the graph size by %d \n", PERCENT, cutsize);
   printf("This will produce a graph with %d nodes.\n", (NODESIZE - cutsize));
+  SETVANV(&g, "idRef", &idRef);
   analysis_all(&g);
   runFilters(&g, cutsize);
   if (REPORT == true) {

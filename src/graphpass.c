@@ -179,6 +179,15 @@ int main (int argc, char *argv[]) {
   /** load the graphml **/
   load_graph(FILEPATH);
   free(FILEPATH);
+  
+  /* TEST CODE PLS REMOVE */
+  igraph_t g2;
+  analysis_all(&g);  
+  igraph_copy(&g2, &g);
+  rankCompare(&g, &g2, "Degree");
+  
+  /* END TEST CODE */
+  
   /** start the filtering based on values and methods **/
   filter_graph();
   printf("\n\n>>>>  SUCCESS!");

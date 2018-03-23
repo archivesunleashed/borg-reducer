@@ -15,6 +15,7 @@
  limitations under the License. */
 
 #include <graphpass.h>
+#include <math.h>
 
 /** @file analyze.c
     @brief Provides basic network analysis and adds them to the graph output.
@@ -32,6 +33,41 @@
  @param graph - the graph for which to record the scores.
  @return 0 unless error occurs.
  */
+
+igraph_real_t mean_vector (igraph_vector_t *v1) {
+  return (igraph_vector_sum(v1)/igraph_vector_size(v1));
+}
+
+igraph_real_t variance_vector (igraph_vector_t *v1) {
+  igraph_real_t mean = mean_vector(v1);
+  igraph_vector_t squared_residuals;
+  igraph_vector_init(&squared_residuals, igraph_vector_size(v1));
+  igraph_real_t variance;
+  for (long int i=0; i<igraph_vector_size(v1); i++) {
+    VECTOR(squared_residuals)[i] = pow((igraph_vector_e(v1, i) - mean), 2);
+  }
+  variance = (igraph_vector_sum(&squared_residuals) / (igraph_vector_size(&squared_residuals) -1));
+  igraph_vector_destroy(&squared_residuals);
+  return variance;
+}
+
+igraph_real_t std_vector(igraph_vector_t *v1) {
+  return sqrt(variance_vector(v1));
+}
+
+int paired_t_test (igraph_vector_t *v1, igraph_vector_t *v2, long int result[2]) {
+  igraph_vector_t diff;
+  igraph_vector_init(&diff, igraph_vector_size(v2));
+  igraph_real_t mean;
+  igraph_real_t std;
+  for (int i=0; i<igraph_vector_size(v1); i++) {
+    VECTOR(diff)[i] = igraph_vector_e(v1,i) - igraph_vector_e(v2,i);
+  }
+  mean = mean_vector(&diff);
+  std = std_vector(&diff);
+  // calculate t-statistic and p-value;
+  return 0;
+}
 
 extern int calc_betweenness(igraph_t *graph){
   char *attr = "Betweenness";
@@ -240,13 +276,15 @@ int produceRank(igraph_vector_t *source, igraph_vector_t *v) {
   }
   for (long int i=0; i < source_size; i++) {
     long int j = 0;
-    while (j< source_size) {
-      if (igraph_vector_e(source, i) == VECTOR(source_cpy)[j]) {
-        igraph_vector_set(v,i,VECTOR(rank_vals)[j]);
-        break;
-      }
+    while (igraph_vector_e(source, i) != VECTOR(source_cpy)[j]) {
       j++;
+      if (j > source_size) {
+        printf("Unexpected ERROR in producing rankordering of nodes.");
+        printf("This is a sign of something wrong with the graph, so exiting.");
+        exit (-1);
+      }
     }
+    igraph_vector_set(v,i,VECTOR(rank_vals)[j]);
   }
   igraph_vector_destroy(&rank_vals);
   igraph_vector_destroy(&source_cpy);
@@ -266,6 +304,14 @@ extern int analysis_all (igraph_t *graph) {
   calc_authority(graph);
   calc_betweenness(graph);
   calc_degree(graph, 'd');
+  igraph_vector_t deg, rank;
+  igraph_vector_init(&deg, igraph_vcount(graph));
+  igraph_vector_init(&rank, igraph_vcount(graph));
+  VANV(graph, "Degree", &deg);
+  produceRank(&deg, &rank);
+  SETVANV(graph, "DegreeRank", &rank);
+  igraph_vector_destroy(&deg);
+  igraph_vector_destroy(&rank);
   calc_hub(graph);
   calc_degree(graph, 'i');
   calc_degree(graph, 'o');

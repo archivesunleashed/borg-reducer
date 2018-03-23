@@ -48,6 +48,32 @@ int pushRank (struct RankNode** head_ref, int rankids[20]) {
   return 0;
 }
 
+
+/** Does a rank-order test on two graphs, bassed on attribute **/
+int rankCompare(igraph_t *g1, igraph_t *g2, char* attr) {
+  igraph_vector_t rank1, rank2;
+  char attribute[strlen(attr) + 5];
+  strncpy(attribute, attr, strlen(attr)+1);
+  strncat(attribute, "Rank", 4);
+  if (igraph_vcount(g1) < igraph_vcount(g2)){
+    igraph_vector_init(&rank2, igraph_vcount(g1));
+    igraph_vector_init(&rank1, igraph_vcount(g2));
+    VANV(g1, attribute, &rank2);
+    VANV(g2, attribute, &rank1);
+  } else {
+    igraph_vector_init(&rank2, igraph_vcount(g2));
+    igraph_vector_init(&rank1, igraph_vcount(g1));
+    VANV(g2, attribute, &rank2);
+    VANV(g1, attribute, &rank1);
+  }
+  //need to find ranks based on idReference from original (unfiltered) graph.
+  
+  // Wilcoxon of rank1 vs rank2 here.
+  printf("%s", attribute);
+  return 0;
+}
+
+
 /** Writes the report **/
 int write_report(igraph_t *graph) {
   if (QUICKRUN == true) { /*< QUICKRUN does not write a report */
@@ -131,3 +157,5 @@ int write_report(igraph_t *graph) {
   igraph_strvector_destroy(&enames);
   return 0;
 }
+
+

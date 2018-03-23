@@ -40,6 +40,9 @@ extern void TEST_PAGERANK_ALGORITHM(void);
 extern void TEST_INDEGREE_ALGORITHM(void);
 extern void TEST_OUTDEGREE_ALGORITHM(void);
 extern void TEST_MODULARITY(void);
+extern void TEST_MEAN(void);
+extern void TEST_VARIANCE(void);
+extern void TEST_STD(void);
 
 void resetTest(void);
 void resetTest(void)
@@ -67,6 +70,9 @@ int main (void) {
   RUN_TEST(TEST_PAGERANK_ALGORITHM, 91);
   RUN_TEST(TEST_MODULARITY, 102);
   RUN_TEST(TEST_RANKORDER, 113);
+  RUN_TEST(TEST_MEAN, 138);
+  RUN_TEST(TEST_VARIANCE, 151);
+  RUN_TEST(TEST_STD,164);
   igraph_destroy(&g);
   return (UNITY_END());
 }
