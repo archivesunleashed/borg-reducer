@@ -151,22 +151,31 @@ int create_filtered_graph(igraph_t *graph, double cutoff, int cutsize, char* att
   calc_eigenvector (&g2);
   calc_pagerank (&g2);
   calc_modularity(&g2);
+  
   colors(&g2);
   igraph_vector_t size;
   igraph_vector_init(&size, cutsize);
+  igraph_vector_t rank;
+  igraph_vector_init(&rank, igraph_vcount(&g2));
+  
   igraph_vector_t ideg;
   igraph_vector_t odeg;
   igraph_vector_init(&ideg, cutsize);
   igraph_vector_init(&odeg, cutsize);
+  
   VANV(&g2, "Degree", &size);
   VANV(&g2, "Indegree", &ideg);
   VANV(&g2, "Outdegree", &odeg);
+  // print size here.
+  produceRank(&size, &rank);
+  printf("finishProduce Rank");
+  SETVANV(&g2, "DegreeRank", &rank);
   set_size(&g2, &size, 100);
   centralization(&g2, "Betweenness");
   centralization(&g2, "PageRank");
   centralization(&g2, "Degree");
   centralization(&g2, "Eigenvector");
-  igraph_real_t pathl, cluster, assort, dens, recip;
+  igraph_real_t pathl, cluster, assort, dens, recip, pvals, tsco;
   igraph_integer_t dia;
   igraph_average_path_length(graph, &pathl, 1, 1);
   igraph_diameter(&g2, &dia, NULL, NULL, NULL ,1, 1);
@@ -210,8 +219,11 @@ int create_filtered_graph(igraph_t *graph, double cutoff, int cutsize, char* att
   push(&eigcent, GAN(&g2, "centralizationEigenvector"), attr);
   push(&pagecent, GAN(&g2, "centralizationPageRank"), attr);
   push(&reciprocity, recip, attr);
-  rankCompare(&g, &g2, "Degree");
+  rankCompare(&g, &g2, "Degree", &pvals, &tsco);
+  push(&pv, pvals, attr);
+  push(&ts, tsco, attr);
   igraph_vector_destroy(&size);
+  igraph_vector_destroy(&rank);
   igraph_vector_destroy(&ideg);
   igraph_vector_destroy(&odeg);
   igraph_vs_destroy(&selector);
@@ -304,6 +316,7 @@ int filter_graph() {
     write_report(&g);
   }
   igraph_destroy(&g);
+  igraph_vector_destroy(&idRef);
   return 0;
 }
 

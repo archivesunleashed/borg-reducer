@@ -416,7 +416,6 @@ int produceRank(igraph_vector_t *source, igraph_vector_t *v) {
   long int source_size;
   source_size = igraph_vector_size(source);
   igraph_vector_t source_cpy, rank_vals;
-  igraph_vector_init(&source_cpy, source_size);
   igraph_vector_init(&rank_vals, source_size);
   igraph_vector_copy(&source_cpy, source);
   igraph_vector_sort(&source_cpy);
@@ -429,18 +428,16 @@ int produceRank(igraph_vector_t *source, igraph_vector_t *v) {
     } else {
       VECTOR(rank_vals)[i] = i+1;
     }
+    //printf("I : %li, RANKVALS: %f", i, VECTOR(rank_vals)[i]);
   }
   for (long int i=0; i < source_size; i++) {
-    long int j = 0;
-    while (igraph_vector_e(source, i) != VECTOR(source_cpy)[j]) {
-      j++;
-      if (j > source_size) {
-        printf("Unexpected ERROR in producing rankordering of nodes.");
-        printf("This is a sign of something wrong with the graph, so exiting.");
-        exit (-1);
+    for (long int j=0; j < source_size; j++) {
+      if (igraph_vector_e(source, i) == igraph_vector_e(&source_cpy,j)) {
+        //igraph_vector_set(v, i, VECTOR(rank_vals)[j]);
+        VECTOR(*v)[i] = VECTOR(rank_vals)[j];
+        break;
       }
     }
-    igraph_vector_set(v,i,VECTOR(rank_vals)[j]);
   }
   igraph_vector_destroy(&rank_vals);
   igraph_vector_destroy(&source_cpy);
@@ -502,6 +499,36 @@ extern int analysis_all (igraph_t *graph) {
   centralization(graph, "Eigenvector");
   centralization(graph, "PageRank");
   igraph_vector_destroy(&mod);
+  igraph_vector_destroy(&rank);
+  return 0;
+}
+
+int create_graph_csv(char* filepath, int start, int perc) {
+  struct stat st = {0};
+  if (stat("GRAPH/", &st) == -1) {
+    mkdir("GRAPH/", 0700);
+  }
+  FILE *fs;
+  fs = fopen("GRAPH/graph_report.csv", "a");
+  fprintf(fs, "| perc       | Authority  | Betweenness | Degree      | Eigenvector | Hub         | Indegree    | OutDegree   | PageRank    |  Random      |\n");
+  
+  for (int i=start; i<perc; i++) {
+    REPORT = false;
+    SAVE = false;
+    PERCENT = i;
+    METHODS = ALL_METHODS;
+    OUTPUT = "GRAPH/";
+    load_graph(filepath);
+    filter_graph();
+    fprintf(fs, "|%-5i|", i);
+    while (pv != NULL) {
+      fprintf(fs, "%-13f|", pv->val);
+      pv = pv->next;
+    }
+    fprintf(fs, "\n");
+    pv = EmptyNode;
+  }
+  fclose(fs);
   return 0;
 }
 

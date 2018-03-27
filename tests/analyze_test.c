@@ -123,11 +123,11 @@ void TEST_RANKORDER() {
   VECTOR(test)[4] = 10; VECTOR(test)[5] = 100;
   VECTOR(test)[6] = 11; VECTOR(test)[7] = 99;
   VECTOR(test)[8] = 2;  VECTOR(test)[9] = 10;
-  VECTOR(ranks)[0] = 4; VECTOR(ranks)[1] = 9;
-  VECTOR(ranks)[2] = 8;  VECTOR(ranks)[3] = 7;
-  VECTOR(ranks)[4] = 4; VECTOR(ranks)[5] = 1;
-  VECTOR(ranks)[6] = 3; VECTOR(ranks)[7] = 2;
-  VECTOR(ranks)[8] = 9;  VECTOR(ranks)[9] = 4;
+  VECTOR(ranks)[0] = 4.0; VECTOR(ranks)[1] = 9.0;
+  VECTOR(ranks)[2] = 8.0;  VECTOR(ranks)[3] = 7.0;
+  VECTOR(ranks)[4] = 4.0; VECTOR(ranks)[5] = 1.0;
+  VECTOR(ranks)[6] = 3.0; VECTOR(ranks)[7] = 2.0;
+  VECTOR(ranks)[8] = 9.0;  VECTOR(ranks)[9] = 4.0;
   produceRank(&test, &test2);
   TEST_ASSERT_TRUE(igraph_vector_all_e(&test2, &ranks));
   igraph_vector_destroy(&test);
