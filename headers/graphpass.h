@@ -65,7 +65,7 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 #define VIZ_SET_LARGE "viz_large.h"
 #define VIZ_SET_SMALL "vis_small.h"
 
-/* Required External libraries */
+/* Default Settings */
 #define MAX_METHODS 9
 #define ALL_METHODS "abdehiopr"
 #define SIZE_DEFAULT "Degree"
@@ -73,6 +73,7 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 #define COLOR_BASE "WalkTrapModularity"
 #define PAGERANK_DAMPING 0.85 /**< chance random walk will not restart */
 #define LAYOUT_DEFAULT_CHAR 'f'
+#define MAX_NODES 40000
 
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 

@@ -32,6 +32,7 @@
 
 
 #include "igraph.h"
+#include <stdlib.h>
 #include "graphpass.h"
 
 char* FILEPATH; /**< The filepath (ug_DIRECTORY + ug_FILENAME) */
@@ -178,6 +179,11 @@ int main (int argc, char *argv[]) {
   
   load_graph(FILEPATH);
   free(FILEPATH);
+  if (igraph_vcount(&g) > MAX_NODES) {
+    printf ("Graphpass can only conduct analysis on graphs with less than 40k nodes.\n");
+    printf ("Exiting...\n");
+    exit(EXIT_FAILURE);
+  }
   
   /** start the filtering based on values and methods **/
   filter_graph();
