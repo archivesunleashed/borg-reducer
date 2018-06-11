@@ -180,7 +180,7 @@ int main (int argc, char *argv[]) {
   load_graph(FILEPATH);
   free(FILEPATH);
   if (igraph_vcount(&g) > MAX_NODES) {
-    printf ("Graphpass can only conduct analysis on graphs with less than 40k nodes.\n");
+    printf ("Graphpass can only conduct analysis on graphs with less than %i nodes.\n", MAX_NODES);
     printf ("Exiting...\n");
     exit(EXIT_FAILURE);
   }
