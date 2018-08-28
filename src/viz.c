@@ -163,7 +163,7 @@ extern int set_size(igraph_t *graph, igraph_vector_t *v, int max) {
     double val = log(VECTOR(v2)[i] + 1);
     double minimum = log(igraph_vector_min(&v2) + 1);
     double maximum = log(igraph_vector_max(&v2) + 1);
-    VECTOR(logOf)[i] = maximum == minimum ? (max * (val - minimum)) : (max * (val - minimum) / (maximum - minimum));
+    VECTOR(logOf)[i] = maximum == minimum ? VECTOR(v2)[i] : (max * (val - minimum) / (maximum - minimum));
   }
   SETVANV(graph, "size", &logOf);
   igraph_vector_destroy(&logOf);
