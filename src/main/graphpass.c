@@ -176,8 +176,9 @@ int main (int argc, char *argv[]) {
   }
   load_graph(FILEPATH);
   free(FILEPATH);
-  if (igraph_vcount(&g) > MAX_NODES) {
-    printf ("FAIL >>> Graphpass can only conduct analysis on graphs with fewer than %i nodes.\n", MAX_NODES);
+  if (igraph_vcount(&g) > MAX_NODES || igraph_ecount(&g) > MAX_EDGES){
+    printf ("FAIL >>> Graphpass can only conduct analysis on graphs with \
+    fewer than %i nodes and %i edges.\n", MAX_NODES, MAX_EDGES);
     printf ("FAIL >>> Exiting...\n");
     exit(EXIT_FAILURE);
   }

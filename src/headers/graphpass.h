@@ -40,6 +40,7 @@ char* ug_methods;  /**< METHODS to filter */
 char* ug_OUTPUT;  /**< Folder to output new graphs */
 char* OUTPATH; /**< Path to output folder (DIRECTORY + OUTPUT) */
 igraph_integer_t NODESIZE; /**< Number of Nodes in original graph */
+igraph_integer_t EDGESIZE; /**< Number of Edges in origianl graph */
 float ug_percent; /**< Filtering percentage 0.0 by default */
 bool ug_report; /**< Include a report? */
 bool ug_gformat; /**< Graph format - true is "GEXF" false is "GRAPHML" */
@@ -76,6 +77,7 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 #define PAGERANK_DAMPING 0.85 /**< chance random walk will not restart */
 #define LAYOUT_DEFAULT_CHAR 'f'
 #define MAX_NODES 50000 /**< number of nodes in graph before shut down */
+#define MAX_EDGES 1000000 /**< number of edges in graph before shut down */
 
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
