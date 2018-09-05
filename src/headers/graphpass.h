@@ -40,7 +40,7 @@ char* ug_methods;  /**< METHODS to filter */
 char* ug_OUTPUT;  /**< Folder to output new graphs */
 char* OUTPATH; /**< Path to output folder (DIRECTORY + OUTPUT) */
 igraph_integer_t NODESIZE; /**< Number of Nodes in original graph */
-igraph_integer_t EDGESIZE; /**< Number of Edges in origianl graph */
+igraph_integer_t EDGESIZE; /**< Number of Edges in original graph */
 float ug_percent; /**< Filtering percentage 0.0 by default */
 long ug_maxnodes; /**< user-defined max nodes for processing, default MAX_NODES */
 long ug_maxedges; /**< user-defined maxiumum edges for processing default MAX_EDGES */
