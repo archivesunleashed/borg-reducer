@@ -10,3 +10,6 @@ OUT
 /tmp/
 *.swp
 .DS_Store
+*.gcno
+*.gcda
+*.gcov
