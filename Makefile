@@ -24,15 +24,15 @@ BUILD = build/
 all: test install
 
 install: src/main/graphpass.c
-	gcc src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass
+	gcc src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass -fprofile-arcs -ftest-coverage
 	- ./graphpass -qn
 
 release: src/main/graphpass.c
-	gcc src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass
+	gcc src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass -fprofile-arcs -ftest-coverage
 	- ./graphpass -qg
 
 debug: ./src/main/graphpass.c
-	gcc -g src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass
+	gcc -g src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass -fprofile-arcs -ftest-coverage
 
 test: qp ana run clean
 
@@ -52,3 +52,7 @@ clean:
 	rm -f ana
 	rm -rf TEST_OUT_FOLDER
 	rm -f graphpass
+	rm -f *.gcno
+	rm -f *.gcda
+	rm -f *.c.gcov
+	rm -f *.h.gcov
