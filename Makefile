@@ -52,3 +52,7 @@ clean:
 	rm -f ana
 	rm -rf TEST_OUT_FOLDER
 	rm -f graphpass
+	rm -f *.gcno
+	rm -f *.gcda
+	rm -f *.c.gcov
+	rm -f *.h.gcov
