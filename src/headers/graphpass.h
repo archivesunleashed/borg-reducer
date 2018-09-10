@@ -79,7 +79,7 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 #define PAGERANK_DAMPING 0.85 /**< chance random walk will not restart */
 #define LAYOUT_DEFAULT_CHAR 'f'
 #define MAX_NODES 50000 /**< default number of nodes in graph before shut down */
-#define MAX_EDGES 1000000 /**< default number of edges in graph before shut down */
+#define MAX_EDGES 500000 /**< default number of edges in graph before shut down */
 #define MAX_USER_EDGES 1000000000
 #define MAX_USER_NODES 1000000000
 
