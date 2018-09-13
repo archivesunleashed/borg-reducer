@@ -1,18 +1,20 @@
-/* -*- Graphpass -- Network Graph Utilities mode: C -*-  */
-/* Copyright [2018] [Ryan Deschamps]
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License. */
-
+/*
+ * GraphPass:
+ * A utility to filter networks and provide a default visualization output
+ * for Gephi or SigmaJS.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #ifndef LIB_GRAPHPASS_H
 #define LIB_GRAPHPASS_H
@@ -40,8 +42,10 @@ char* ug_methods;  /**< METHODS to filter */
 char* ug_OUTPUT;  /**< Folder to output new graphs */
 char* OUTPATH; /**< Path to output folder (DIRECTORY + OUTPUT) */
 igraph_integer_t NODESIZE; /**< Number of Nodes in original graph */
-igraph_integer_t EDGESIZE; /**< Number of Edges in origianl graph */
+igraph_integer_t EDGESIZE; /**< Number of Edges in original graph */
 float ug_percent; /**< Filtering percentage 0.0 by default */
+long ug_maxnodes; /**< user-defined max nodes for processing, default MAX_NODES */
+long ug_maxedges; /**< user-defined maxiumum edges for processing default MAX_EDGES */
 bool ug_report; /**< Include a report? */
 bool ug_gformat; /**< Graph format - true is "GEXF" false is "GRAPHML" */
 bool ug_quickrun; /**< Lightweight visualization run */
@@ -76,8 +80,10 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 #define COLOR_BASE "WalkTrapModularity"
 #define PAGERANK_DAMPING 0.85 /**< chance random walk will not restart */
 #define LAYOUT_DEFAULT_CHAR 'f'
-#define MAX_NODES 50000 /**< number of nodes in graph before shut down */
-#define MAX_EDGES 1000000 /**< number of edges in graph before shut down */
+#define MAX_NODES 50000 /**< default number of nodes in graph before shut down */
+#define MAX_EDGES 500000 /**< default number of edges in graph before shut down */
+#define MAX_USER_EDGES 1000000000
+#define MAX_USER_NODES 1000000000
 
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
