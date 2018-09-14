@@ -28,7 +28,7 @@ void setUp() {
   ug_quickrun = true;
   ug_save = false;
   ug_FILENAME = "cpp2.graphml";
-  ug_OUTPUT = "TEST_OUT_FOLDER/";
+  ug_OUTPATH = "TEST_OUT_FOLDER/";
   ug_percent = 0.0;
   ug_DIRECTORY = "src/resources/";
   ug_gformat = false;
