@@ -30,17 +30,20 @@
 #include <unistd.h>
 #include <errno.h>
 #include <getopt.h>
+#include <libgen.h>
 
 typedef enum { false, true } bool;
 typedef enum { FAIL, WARN, COMM } broadcast;
 
 igraph_t g;
 igraph_attribute_table_t att;
-const char* ug_FILENAME; /**< The filename from -f flag. */
-const char* ug_DIRECTORY; /**< Directory to access FILENAME */
+
+char* ug_FILENAME; /**< FILENAME extracted from stdin path */
+char* ug_PATH; /**< Directory path extracted from stdin path */
 char* ug_methods;  /**< METHODS to filter */
-char* ug_OUTPUT;  /**< Folder to output new graphs */
-char* OUTPATH; /**< Path to output folder (DIRECTORY + OUTPUT) */
+char* ug_OUTPATH; /**< Path to output folder */
+char* ug_OUTPUT; /**< Filename extracted from outpath, if it exists. */
+char* ug_DIRECTORY; /**< Directory extracted from ug_PATH */
 igraph_integer_t NODESIZE; /**< Number of Nodes in original graph */
 igraph_integer_t EDGESIZE; /**< Number of Edges in original graph */
 float ug_percent; /**< Filtering percentage 0.0 by default */
