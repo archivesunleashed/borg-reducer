@@ -38,6 +38,8 @@ typedef enum { FAIL, WARN, COMM } broadcast;
 igraph_t g;
 igraph_attribute_table_t att;
 
+char* ug_OUT; /**< A FILEPATH called using -o flag */
+char* ug_INPUT; /** A FILEPATH called using -i flag */
 char* ug_FILENAME; /**< FILENAME extracted from stdin path */
 char* ug_PATH; /**< Directory path extracted from stdin path */
 char* ug_methods;  /**< METHODS to filter */

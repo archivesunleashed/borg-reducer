@@ -76,16 +76,16 @@ extern int write_graph(igraph_t *graph, char *attr) {
   FILE *fp;
   char fn[strlen(ug_FILENAME)+1];
   struct stat st = {0};
-  if (stat(ug_OUTPUT, &st) == -1) {
-    mkdir(ug_OUTPUT, 0700);
+  if (stat(ug_OUTPATH, &st) == -1) {
+    mkdir(ug_OUTPATH, 0700);
   }
-  char path[150];
+  char path[250];
   char perc_as_string[3];
   int perc = (int)ug_percent;
   strncpy(fn, ug_FILENAME, strlen(ug_FILENAME));
   strip_ext(fn);
   snprintf(perc_as_string, 3, "%d", perc);
-  strncpy(path, ug_OUTPUT, strlen(ug_OUTPUT)+1);
+  strncpy(path, ug_OUTPATH, strlen(ug_OUTPATH)+1);
   strncat(path, fn, (strlen(fn)+1));
   if (ug_quickrun == false) {
     strncat(path, perc_as_string, 3);

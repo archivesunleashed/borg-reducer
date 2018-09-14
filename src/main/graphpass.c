@@ -47,11 +47,19 @@ bool ug_report = false;
 bool ug_quickrun = false;
 /** Print out helper messages **/
 bool ug_verbose = false;
+const char hyphen = '-';
+char check1;
+char check2;
 
 int main (int argc, char *argv[]) {
-  /* Experiments here
-
-   End experiments */
+  check1 = argv[1] ? argv[1][0] : hyphen;
+  check2 = argv[2] ? argv[2][0] : hyphen;
+  if (check1 != hyphen) {
+    ug_PATH = argv[1];
+  }
+  if (check2 != hyphen) {
+    ug_OUTPATH = argv[2];
+  }
 
   int c;
   while (1)
@@ -61,12 +69,14 @@ int main (int argc, char *argv[]) {
           /* These options have no required argument */
           {"gexf",    no_argument,       0, 'g'},
           {"no-save", no_argument,       0, 'n'},
-          {"verbose", no_argument,       0, 'v'},
           {"quick",   no_argument,       0, 'q'},
           {"report",  no_argument,       0, 'r'},
+          {"verbose", no_argument,       0, 'v'},
 
           /* These options require an argument */
+          {"input", required_argument, 0, 'i'},
           {"methods", required_argument, 0, 'm'},
+          {"output",  required_argument, 0, 'o'},
           {"percent", required_argument, 0, 'p'},
           {"max-nodes", required_argument, 0, 'x'},
           {"max-edges", required_argument, 0, 'y'},
@@ -74,7 +84,7 @@ int main (int argc, char *argv[]) {
         };
       /* getopt_long stores the option index here. */
       int option_index = 0;
-      c = getopt_long (argc, argv, "gnvqrm:p:x:y:",
+      c = getopt_long (argc, argv, "gnvqri:m:o:p:x:y:",
                        long_options, &option_index);
 
       /* Detect the end of the options. */
@@ -86,29 +96,35 @@ int main (int argc, char *argv[]) {
           /* If this option set a flag, do nothing else now. */
           if (long_options[option_index].flag != 0)
             break;
-        case 'v':
-          ug_verbose = true;
-          break;
         case 'n':
           ug_save = !ug_save;
           break;
         case 'g':
           ug_gformat = !ug_gformat;
           break;
+        case 'i':
+          ug_INPUT = optarg ? optarg : "./";
+          break;
         case 'r':
           ug_report = !ug_report;
           break;
-        case 'p':
-          ug_percent = optarg ? atof(optarg) : 0.0;
-          break;
         case 'm':
           ug_methods = optarg ? optarg : "d";
+          break;
+        case 'o':
+          ug_OUT = optarg ? optarg : "./";
+          break;
+        case 'p':
+          ug_percent = optarg ? atof(optarg) : 0.0;
           break;
         case 'q':
           ug_quickrun = !ug_quickrun;
           break;
         case 'w':
           CALC_WEIGHTS = !CALC_WEIGHTS;
+          break;
+        case 'v':
+          ug_verbose = true;
           break;
         case 'x':
           ug_maxnodes = optarg ? (long)strtol(optarg, (char**)NULL, 10) : MAX_NODES;
@@ -127,8 +143,6 @@ int main (int argc, char *argv[]) {
   /* Print any remaining command line arguments (not options). */
   if (optind < argc)
     {
-      ug_PATH = argv[0] ? argv[0] : "./";
-      ug_OUTPATH = argv[1] ? argv[1] : "./";
       printf ("non-option ARGV-elements: ");
       while (optind < argc)
         printf ("%s ", argv[optind++]);
@@ -136,15 +150,17 @@ int main (int argc, char *argv[]) {
     }
 
   /** set default values if not included in flags **/
+
   ug_maxnodes = ug_maxnodes ? ug_maxnodes : MAX_NODES;
   ug_maxedges = ug_maxedges ? ug_maxedges : MAX_EDGES;
   ug_percent = ug_percent ? ug_percent : 0.00;
   ug_methods = ug_methods ? ug_methods : "d";
-  FILEPATH = ug_PATH ? ug_PATH : "src/resources/cpp2.graphml";
-  ug_FILENAME = ug_PATH ? basename(ug_PATH) : "FILE";
-  ug_DIRECTORY = ug_PATH ? dirname(ug_PATH) : "./";
-  ug_OUTPATH = ug_OUTPATH ? dirname(ug_OUTPATH) : ug_DIRECTORY;
-  ug_OUTPUT = ug_OUTPATH ? basename(ug_OUTPATH) : ug_FILENAME;
+  FILEPATH = ug_INPUT ? ug_INPUT : ug_PATH;
+  FILEPATH = FILEPATH ? FILEPATH : "src/resources/cpp2.graphml";
+  printf("\n%s\n", FILEPATH);
+  ug_FILENAME = FILEPATH ? basename(FILEPATH) : "FILE";
+  ug_DIRECTORY = FILEPATH ? dirname(FILEPATH) : "./";
+  ug_OUTPATH = ug_OUTPATH ? ug_OUTPATH : "OUT/";
 
   /** start output description **/
   if (ug_verbose == true) {
