@@ -143,6 +143,9 @@ int main (int argc, char *argv[]) {
     ug_OUTPATH = ug_args->val;
     if (ug_args->next) {
       ug_PATH = ug_args->next->val;
+    } else {
+      ug_PATH = ug_OUTPATH;
+      ug_OUTPATH = NULL;
     }
   }
   ug_maxnodes = ug_maxnodes ? ug_maxnodes : MAX_NODES;
@@ -157,7 +160,7 @@ int main (int argc, char *argv[]) {
     ug_OUTFILE = (ug_OUTPATH[strlen(ug_OUTPATH)-1] != '/') ? basename(ug_OUTPATH) : ug_FILENAME;
     ug_OUTPATH = (ug_OUTPATH[strlen(ug_OUTPATH)-1] == '/') ? ug_OUTPATH : strncat(dirname(ug_OUTPATH), "/", 1);
   } else {
-    ug_OUTPATH = "OUT/";
+    ug_OUTPATH = "./OUT/";
     ug_OUTFILE = ug_FILENAME;
   }
 
