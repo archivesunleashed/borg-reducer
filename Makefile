@@ -25,11 +25,11 @@ all: test install
 
 install: src/main/graphpass.c
 	gcc src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass
-	- ./graphpass -qnv src/resources/cpp2.graphml $(BUILD)
+	- ./graphpass -qnv
 
 release: src/main/graphpass.c
 	gcc src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass
-	- ./graphpass -qgv
+	- ./graphpass -qgnv
 
 debug: ./src/main/graphpass.c
 	gcc -g src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm  -o graphpass

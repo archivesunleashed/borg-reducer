@@ -158,7 +158,7 @@ int main (int argc, char *argv[]) {
   ug_DIRECTORY = FILEPATH ? dirname(FILEPATH) : "./";
   if (ug_OUTPATH) {
     ug_OUTFILE = (ug_OUTPATH[strlen(ug_OUTPATH)-1] != '/') ? basename(ug_OUTPATH) : ug_FILENAME;
-    ug_OUTPATH = (ug_OUTPATH[strlen(ug_OUTPATH)-1] == '/') ? ug_OUTPATH : strncat(dirname(ug_OUTPATH), "/", 1);
+    ug_OUTPATH = (ug_OUTPATH[strlen(ug_OUTPATH)-1] == '/') ? ug_OUTPATH : strncat(dirname(ug_OUTPATH), "/", 2);
   } else {
     ug_OUTPATH = "./OUT/";
     ug_OUTFILE = ug_FILENAME;
