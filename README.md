@@ -86,7 +86,7 @@ Then
 
 ```
 cd graphpass
-make
+make clean all
 ```
 
 ## Usage
