@@ -31,6 +31,7 @@ void setUp() {
   ug_OUTPATH = "TEST_OUT_FOLDER/";
   ug_percent = 0.0;
   ug_DIRECTORY = "src/resources/";
+  ug_OUTFILE = ug_FILENAME;
   ug_gformat = false;
 }
 

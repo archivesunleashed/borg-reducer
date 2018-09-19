@@ -82,6 +82,7 @@ extern int igraph_write_graph_gexf(const igraph_t *graph, FILE *outstream,
   const char *gprefix= prefixattr ? "g_" : "";
   const char *vprefix= prefixattr ? "v_" : "";
   const char *eprefix= prefixattr ? "e_" : "";
+  printf("writing gexf");
 
   ret=fprintf(outstream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\x0A");
   if (ret<0) IGRAPH_ERROR("Write failed", IGRAPH_EFILE);

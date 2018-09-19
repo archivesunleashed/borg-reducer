@@ -151,10 +151,15 @@ int main (int argc, char *argv[]) {
   ug_methods = ug_methods ? ug_methods : "d";
   FILEPATH = ug_INPUT ? ug_INPUT : ug_PATH;
   FILEPATH = FILEPATH ? FILEPATH : "src/resources/cpp2.graphml";
-  printf("\n%s\n", FILEPATH);
   ug_FILENAME = FILEPATH ? basename(FILEPATH) : "FILE";
   ug_DIRECTORY = FILEPATH ? dirname(FILEPATH) : "./";
-  ug_OUTPATH = ug_OUTPATH ? ug_OUTPATH : "OUT/";
+  if (ug_OUTPATH) {
+    ug_OUTFILE = (ug_OUTPATH[strlen(ug_OUTPATH)-1] != '/') ? basename(ug_OUTPATH) : ug_FILENAME;
+    ug_OUTPATH = (ug_OUTPATH[strlen(ug_OUTPATH)-1] == '/') ? ug_OUTPATH : strncat(dirname(ug_OUTPATH), "/", 1);
+  } else {
+    ug_OUTPATH = "OUT/";
+    ug_OUTFILE = ug_FILENAME;
+  }
 
   /** start output description **/
   if (ug_verbose == true) {
