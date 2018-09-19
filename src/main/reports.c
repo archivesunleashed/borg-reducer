@@ -50,6 +50,15 @@ int pushRank (struct RankNode** head_ref, int rankids[20]) {
   return 0;
 }
 
+/** adds a new value to Argument **/
+int pushArg (struct Argument** arg, char *value) {
+  struct Argument* newArg = (struct Argument*) malloc(sizeof(struct Argument));
+  newArg->val = value;
+  newArg->next = (*arg);
+  (*arg) = newArg;
+  return 0;
+}
+
 /** Does a rank-order test on two graphs, bassed on attribute **/
 int rankCompare(igraph_t *g1, igraph_t *g2, char* attr, igraph_real_t* result_pv, igraph_real_t* result_ts ) {
   igraph_vector_t rank1, rank2, idRef1, idRef2, checkRef;
@@ -199,5 +208,3 @@ int write_report(igraph_t *graph) {
 int pvalues_to_csv (){
   return 0;
   };
-
-

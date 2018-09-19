@@ -92,6 +92,11 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
+struct Argument {
+  char* val;
+  struct Argument *next;
+};
+
 struct Node {
   char* abbrev;
   igraph_real_t val;
@@ -125,6 +130,7 @@ struct Node* clustering;
 struct Node* pv;
 struct Node* ts;
 struct RankNode* ranks;
+struct Argument* ug_args;
 
 int shuffle(int *array, int n);
 /** adds a new value to a Node **/
@@ -133,6 +139,7 @@ int push(struct Node** head_ref, igraph_real_t value, char* attr);
 /** adds a new value to a RankNode **/
 int pushRank (struct RankNode** head_ref, int rankids[20]);
 int igraph_i_xml_escape(char* src, char** dest);
+int pushArg (struct Argument** arg, char *value);
 
 int igraph_write_graph_gexf(const igraph_t *graph, FILE *outstream,
                             igraph_bool_t prefixattr);

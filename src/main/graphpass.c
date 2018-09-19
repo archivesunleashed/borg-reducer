@@ -48,19 +48,9 @@ bool ug_quickrun = false;
 /** Print out helper messages **/
 bool ug_verbose = false;
 const char hyphen = '-';
-char check1;
-char check2;
+char* checkHyphen;
 
 int main (int argc, char *argv[]) {
-  check1 = argv[1] ? argv[1][0] : hyphen;
-  check2 = argv[2] ? argv[2][0] : hyphen;
-  if (check1 != hyphen) {
-    ug_PATH = argv[1];
-  }
-  if (check2 != hyphen) {
-    ug_OUTPATH = argv[2];
-  }
-
   int c;
   while (1)
     {
@@ -145,12 +135,16 @@ int main (int argc, char *argv[]) {
     {
       printf ("non-option ARGV-elements: ");
       while (optind < argc)
-        printf ("%s ", argv[optind++]);
-      putchar ('\n');
+        pushArg(&ug_args, argv[optind++]);
     }
 
   /** set default values if not included in flags **/
-
+  if (ug_args) {
+    ug_OUTPATH = ug_args->val;
+    if (ug_args->next) {
+      ug_PATH = ug_args->next->val;
+    }
+  }
   ug_maxnodes = ug_maxnodes ? ug_maxnodes : MAX_NODES;
   ug_maxedges = ug_maxedges ? ug_maxedges : MAX_EDGES;
   ug_percent = ug_percent ? ug_percent : 0.00;
