@@ -3,7 +3,7 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
   BASE_PATH = /usr/local/
   IGRAPH_PATH = $(BASE_PATH)
-	LIBGEN = -I/usr/include/libgen.h
+	LIBGEN = -I/usr/include/
 endif
 ifeq ($(UNAME), Darwin)
   IGRAPH_PATH = /usr/local/Cellar/igraph/0.7.1_6/
