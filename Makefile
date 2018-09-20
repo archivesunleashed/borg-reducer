@@ -3,7 +3,6 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
   BASE_PATH = /usr/local/
   IGRAPH_PATH = $(BASE_PATH)
-	LIBGEN = -I/usr/include/
 endif
 ifeq ($(UNAME), Darwin)
   IGRAPH_PATH = /usr/local/Cellar/igraph/0.7.1_6/
@@ -20,7 +19,7 @@ TEST_INCLUDE = ./src/tests/
 TEST_RUNNER_PATH = ./src/tests/
 UNITY_INCLUDE = ./vendor/unity
 INCLUDE = ./src/headers
-DEPS = -I$(INCLUDE) -I$(IGRAPH_INCLUDE) -I$(UNITY_INCLUDE) $(LIBGEN)
+DEPS = -I$(INCLUDE) -I$(IGRAPH_INCLUDE) -I$(UNITY_INCLUDE)
 BUILD = build/
 
 all: test install
