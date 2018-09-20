@@ -36,11 +36,17 @@ typedef enum { FAIL, WARN, COMM } broadcast;
 
 igraph_t g;
 igraph_attribute_table_t att;
-const char* ug_FILENAME; /**< The filename from -f flag. */
-const char* ug_DIRECTORY; /**< Directory to access FILENAME */
+
+char* ug_OUT; /**< A FILEPATH called using -o flag */
+char* ug_OUTFILE; /**< A FILENAME for outputting */
+char* ug_INPUT; /** A FILEPATH called using -i flag */
+char* ug_FILENAME; /**< FILENAME extracted from stdin path */
+char* ug_PATH; /**< Directory path extracted from stdin path */
 char* ug_methods;  /**< METHODS to filter */
-char* ug_OUTPUT;  /**< Folder to output new graphs */
-char* OUTPATH; /**< Path to output folder (DIRECTORY + OUTPUT) */
+char* ug_OUTPATH; /**< Path to output folder */
+char* ug_OUTPUT; /**< Filename extracted from outpath, if it exists. */
+char* ug_OUTARG; /**< Filepath entered as ARG */
+char* ug_DIRECTORY; /**< Directory extracted from ug_PATH */
 igraph_integer_t NODESIZE; /**< Number of Nodes in original graph */
 igraph_integer_t EDGESIZE; /**< Number of Edges in original graph */
 float ug_percent; /**< Filtering percentage 0.0 by default */
@@ -87,6 +93,11 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
+struct Argument {
+  char* val;
+  struct Argument *next;
+};
+
 struct Node {
   char* abbrev;
   igraph_real_t val;
@@ -120,6 +131,9 @@ struct Node* clustering;
 struct Node* pv;
 struct Node* ts;
 struct RankNode* ranks;
+struct Argument* ug_args;
+int get_directory (char *path, char **result);
+int get_filename (char *path, char **result);
 
 int shuffle(int *array, int n);
 /** adds a new value to a Node **/
@@ -128,6 +142,7 @@ int push(struct Node** head_ref, igraph_real_t value, char* attr);
 /** adds a new value to a RankNode **/
 int pushRank (struct RankNode** head_ref, int rankids[20]);
 int igraph_i_xml_escape(char* src, char** dest);
+int pushArg (struct Argument** arg, char *value);
 
 int igraph_write_graph_gexf(const igraph_t *graph, FILE *outstream,
                             igraph_bool_t prefixattr);
