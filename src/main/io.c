@@ -22,6 +22,37 @@
 
 #include <graphpass.h>
 
+/** \fn get_directory
+    \brief gets the directory from a path (not using libgen)
+    @param path - path to extract the directory
+ */
+int get_directory (char *path, char **result) {
+  if (strlen(path) > 499){
+    printf("ERROR: Maximum characters in an outpath is 500.\n");
+    exit(EXIT_FAILURE);
+  }
+   static char temppath[500];
+   char *temp;
+   if (path[strlen(path)-1] ==  '/') {
+     *result = path;
+   } else {
+     strncpy(temppath, path, strlen(path)+1);
+     temp = strrchr(temppath, '/') + 1;
+     *temp = '\0';
+     *result = temppath;
+   }
+   return 0;
+ }
+
+int get_filename (char *path, char **result) {
+  char *temp;
+  if (path[strlen(path)-1] != '/') {
+    temp = strrchr(path, '/') + 1;
+    *result = temp;
+  }
+  return 0;
+}
+
 
 /** \fn strip_ext
     \brief strips the file extension from a filename
@@ -82,7 +113,7 @@ extern int write_graph(igraph_t *graph, char *attr) {
   char path[250];
   char perc_as_string[3];
   int perc = (int)ug_percent;
-  strncpy(fn, ug_OUTFILE, strlen(ug_OUTFILE));
+  strncpy(fn, ug_OUTFILE, strlen(ug_OUTFILE)+1);
   if(strstr(fn, ".") != NULL) {
     strip_ext(fn);
   }

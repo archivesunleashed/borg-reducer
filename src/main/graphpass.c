@@ -48,7 +48,6 @@ bool ug_quickrun = false;
 /** Print out helper messages **/
 bool ug_verbose = false;
 const char hyphen = '-';
-char* checkHyphen;
 
 int main (int argc, char *argv[]) {
   int c;
@@ -140,12 +139,12 @@ int main (int argc, char *argv[]) {
 
   /** set default values if not included in flags **/
   if (ug_args) {
-    ug_OUTPATH = ug_args->val;
+    ug_OUTARG = ug_args->val;
     if (ug_args->next) {
       ug_PATH = ug_args->next->val;
     } else {
-      ug_PATH = ug_OUTPATH;
-      ug_OUTPATH = NULL;
+      ug_PATH = ug_OUTARG;
+      ug_OUTARG = NULL;
     }
   }
   ug_maxnodes = ug_maxnodes ? ug_maxnodes : MAX_NODES;
@@ -154,11 +153,16 @@ int main (int argc, char *argv[]) {
   ug_methods = ug_methods ? ug_methods : "d";
   FILEPATH = ug_INPUT ? ug_INPUT : ug_PATH;
   FILEPATH = FILEPATH ? FILEPATH : "src/resources/cpp2.graphml";
-  ug_FILENAME = FILEPATH ? basename(FILEPATH) : "FILE";
-  ug_DIRECTORY = FILEPATH ? dirname(FILEPATH) : "./";
-  if (ug_OUTPATH) {
-    ug_OUTFILE = (ug_OUTPATH[strlen(ug_OUTPATH)-1] != '/') ? basename(ug_OUTPATH) : ug_FILENAME;
-    ug_OUTPATH = (ug_OUTPATH[strlen(ug_OUTPATH)-1] == '/') ? ug_OUTPATH : strncat(dirname(ug_OUTPATH), "/", 2);
+  get_filename(FILEPATH, &ug_FILENAME);
+  ug_FILENAME = ug_FILENAME ? ug_FILENAME : "FILE";
+  get_directory(FILEPATH, &ug_DIRECTORY);
+  ug_DIRECTORY = ug_DIRECTORY ? ug_DIRECTORY : "./";
+  if (ug_OUTARG) {
+    printf("OUTARG:%s\n", ug_OUTARG);
+    get_filename(ug_OUTARG, &ug_OUTFILE);
+    ug_OUTFILE = ug_OUTFILE ? ug_OUTFILE : ug_FILENAME;
+    get_directory(ug_OUTARG, &ug_OUTPATH);
+    ug_OUTPATH = ug_OUTPATH ? ug_OUTPATH : "./OUT/";
   } else {
     ug_OUTPATH = "./OUT/";
     ug_OUTFILE = ug_FILENAME;

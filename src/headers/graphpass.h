@@ -30,7 +30,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <getopt.h>
-#include <libgen.h>
 
 typedef enum { false, true } bool;
 typedef enum { FAIL, WARN, COMM } broadcast;
@@ -46,6 +45,7 @@ char* ug_PATH; /**< Directory path extracted from stdin path */
 char* ug_methods;  /**< METHODS to filter */
 char* ug_OUTPATH; /**< Path to output folder */
 char* ug_OUTPUT; /**< Filename extracted from outpath, if it exists. */
+char* ug_OUTARG; /**< Filepath entered as ARG */
 char* ug_DIRECTORY; /**< Directory extracted from ug_PATH */
 igraph_integer_t NODESIZE; /**< Number of Nodes in original graph */
 igraph_integer_t EDGESIZE; /**< Number of Edges in original graph */
@@ -132,6 +132,8 @@ struct Node* pv;
 struct Node* ts;
 struct RankNode* ranks;
 struct Argument* ug_args;
+int get_directory (char *path, char **result);
+int get_filename (char *path, char **result);
 
 int shuffle(int *array, int n);
 /** adds a new value to a Node **/

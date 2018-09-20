@@ -103,14 +103,11 @@ int rankCompare(igraph_t *g1, igraph_t *g2, char* attr, igraph_real_t* result_pv
       check++;
     }
   }
-  printf("Check okay? %i\n", igraph_vector_all_e(&checkRef, &idRef2));
-  printf("Rank1 & Rank2 are the same? %i\n", igraph_vector_all_e(&rank1, &rank2));
   igraph_vector_destroy(&idRef2);
   igraph_vector_destroy(&idRef1);
   igraph_real_t pvalue;
   igraph_real_t tstat;
   paired_t_stat(&rank1, &rank2, &pvalue, &tstat);
-  printf("\npvalue: %f\n", pvalue);
   *result_pv = pvalue;
   *result_ts = tstat;
   igraph_vector_destroy(&rank2);
