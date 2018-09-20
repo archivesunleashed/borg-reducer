@@ -47,12 +47,9 @@ bool ug_report = false;
 bool ug_quickrun = false;
 /** Print out helper messages **/
 bool ug_verbose = false;
+const char hyphen = '-';
 
 int main (int argc, char *argv[]) {
-  /* Experiments here
-
-   End experiments */
-
   int c;
   while (1)
     {
@@ -61,13 +58,12 @@ int main (int argc, char *argv[]) {
           /* These options have no required argument */
           {"gexf",    no_argument,       0, 'g'},
           {"no-save", no_argument,       0, 'n'},
-          {"verbose", no_argument,       0, 'v'},
           {"quick",   no_argument,       0, 'q'},
           {"report",  no_argument,       0, 'r'},
+          {"verbose", no_argument,       0, 'v'},
 
           /* These options require an argument */
-          {"dir",     required_argument, 0, 'd'},
-          {"file",    required_argument, 0, 'f'},
+          {"input", required_argument, 0, 'i'},
           {"methods", required_argument, 0, 'm'},
           {"output",  required_argument, 0, 'o'},
           {"percent", required_argument, 0, 'p'},
@@ -77,7 +73,7 @@ int main (int argc, char *argv[]) {
         };
       /* getopt_long stores the option index here. */
       int option_index = 0;
-      c = getopt_long (argc, argv, "gnvqrd:f:m:o:p:x:y:",
+      c = getopt_long (argc, argv, "gnvqri:m:o:p:x:y:",
                        long_options, &option_index);
 
       /* Detect the end of the options. */
@@ -89,39 +85,35 @@ int main (int argc, char *argv[]) {
           /* If this option set a flag, do nothing else now. */
           if (long_options[option_index].flag != 0)
             break;
-        case 'v':
-          ug_verbose = true;
-          break;
         case 'n':
           ug_save = !ug_save;
           break;
         case 'g':
           ug_gformat = !ug_gformat;
           break;
-        case 'd':
-          ug_DIRECTORY = optarg ? optarg : "src/resources/";
+        case 'i':
+          ug_INPUT = optarg ? optarg : "./";
           break;
         case 'r':
           ug_report = !ug_report;
           break;
-        case 'p':
-          ug_percent = optarg ? atof(optarg) : 0.0;
-          break;
         case 'm':
           ug_methods = optarg ? optarg : "d";
           break;
-        case 'f':
-          ug_FILENAME = optarg ? optarg : "cpp2.graphml";
+        case 'o':
+          ug_OUT = optarg ? optarg : "./";
+          break;
+        case 'p':
+          ug_percent = optarg ? atof(optarg) : 0.0;
           break;
         case 'q':
           ug_quickrun = !ug_quickrun;
           break;
-        case 'o':
-          /*check size of output text */
-          ug_OUTPUT = optarg ? optarg : "OUT/";
-          break;
         case 'w':
           CALC_WEIGHTS = !CALC_WEIGHTS;
+          break;
+        case 'v':
+          ug_verbose = true;
           break;
         case 'x':
           ug_maxnodes = optarg ? (long)strtol(optarg, (char**)NULL, 10) : MAX_NODES;
@@ -142,50 +134,54 @@ int main (int argc, char *argv[]) {
     {
       printf ("non-option ARGV-elements: ");
       while (optind < argc)
-        printf ("%s ", argv[optind++]);
-      putchar ('\n');
+        pushArg(&ug_args, argv[optind++]);
     }
 
   /** set default values if not included in flags **/
+  if (ug_args) {
+    ug_OUTARG = ug_args->val;
+    if (ug_args->next) {
+      ug_PATH = ug_args->next->val;
+    } else {
+      ug_PATH = ug_OUTARG;
+      ug_OUTARG = NULL;
+    }
+  }
   ug_maxnodes = ug_maxnodes ? ug_maxnodes : MAX_NODES;
   ug_maxedges = ug_maxedges ? ug_maxedges : MAX_EDGES;
-  ug_OUTPUT = ug_OUTPUT ? ug_OUTPUT : "OUT/";
   ug_percent = ug_percent ? ug_percent : 0.00;
   ug_methods = ug_methods ? ug_methods : "d";
-  ug_DIRECTORY = ug_DIRECTORY ? ug_DIRECTORY : "src/resources/";
-  ug_FILENAME = ug_FILENAME ? ug_FILENAME : "cpp2.graphml";
-
-  /** setup directory path ug_DIRECTORY + ug_FILENAME **/
-  char path[strlen(ug_DIRECTORY)+1];
-  strncpy(path, ug_DIRECTORY, strlen(ug_DIRECTORY)+1);
+  FILEPATH = ug_INPUT ? ug_INPUT : ug_PATH;
+  FILEPATH = FILEPATH ? FILEPATH : "src/resources/cpp2.graphml";
+  get_filename(FILEPATH, &ug_FILENAME);
+  ug_FILENAME = ug_FILENAME ? ug_FILENAME : "FILE";
+  get_directory(FILEPATH, &ug_DIRECTORY);
+  ug_DIRECTORY = ug_DIRECTORY ? ug_DIRECTORY : "./";
+  if (ug_OUTARG) {
+    printf("OUTARG:%s\n", ug_OUTARG);
+    get_filename(ug_OUTARG, &ug_OUTFILE);
+    ug_OUTFILE = ug_OUTFILE ? ug_OUTFILE : ug_FILENAME;
+    get_directory(ug_OUTARG, &ug_OUTPATH);
+    ug_OUTPATH = ug_OUTPATH ? ug_OUTPATH : "./OUT/";
+  } else {
+    ug_OUTPATH = "./OUT/";
+    ug_OUTFILE = ug_FILENAME;
+  }
 
   /** start output description **/
   if (ug_verbose == true) {
     printf(">>>>>>>  GRAPHPASSING >>>>>>>> \n");
-    printf("DIRECTORY: %s \nSTRLEN PATH: %li \n", ug_DIRECTORY, strlen(path));
-    printf("OUTPUT DIRECTORY: %s\nPERCENTAGE: %f\n", ug_OUTPUT, ug_percent);
+    printf("FILEPATH: %s\n", FILEPATH);
+    printf("OUTPUT DIRECTORY: %s\nPERCENTAGE: %f\n", ug_OUTPATH, ug_percent);
     printf("FILE: %s\nMETHODS STRING: %s\n", ug_FILENAME, ug_methods);
     printf("QUICKRUN: %i\nREPORT: %i\nSAVE: %i\n", ug_quickrun, ug_report, ug_save);
   }
-  /** try to be nice if user leaves out a '/' **/
-  if (ug_FILENAME[0] == '/' && ug_DIRECTORY[strlen(ug_DIRECTORY)] == '/' ){
-    path[strlen(path)+1] = '\0';  // remove end slash
-  }
-  else if (ug_FILENAME[0] != '/' && ug_DIRECTORY[strlen(ug_DIRECTORY)-1] != '/') {
-    strncat(path, "/", 1); // add a slash.
-  }
 
   /** set up FILEPATH to access graphml file **/
-  int sizeOfPath = (strlen(path)+1);
-  int sizeOfFile = (strlen(ug_FILENAME)+1);
-  int filepathsize = sizeOfPath + sizeOfFile;
-  FILEPATH = malloc(filepathsize + 1);
-  snprintf(FILEPATH, filepathsize, "%s%s", path, ug_FILENAME);
   if (ug_verbose == true) {
     printf("Running graphpass on file: %s\n", FILEPATH);
   }
   load_graph(FILEPATH);
-  free(FILEPATH);
   if (igraph_vcount(&g) > ug_maxnodes || igraph_ecount(&g) > ug_maxedges){
     printf ("FAIL >>> Graphpass can only conduct analysis on graphs with \
 fewer than %li nodes and %li edges.\n", ug_maxnodes, ug_maxedges);
@@ -197,7 +193,7 @@ fewer than %li nodes and %li edges.\n", ug_maxnodes, ug_maxedges);
   filter_graph();
   printf("\n\n>>>>  SUCCESS!");
   if (ug_save) {
-    printf("- Files output to %s\n", ug_OUTPUT);
+    printf("- Files output to %s\n", ug_OUTPATH);
   }
   else {
     printf("- NO_SAVE requested, so no output.\n\n\n");

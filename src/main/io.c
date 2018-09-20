@@ -22,6 +22,37 @@
 
 #include <graphpass.h>
 
+/** \fn get_directory
+    \brief gets the directory from a path (not using libgen)
+    @param path - path to extract the directory
+ */
+int get_directory (char *path, char **result) {
+  if (strlen(path) > 499){
+    printf("ERROR: Maximum characters in an outpath is 500.\n");
+    exit(EXIT_FAILURE);
+  }
+   static char temppath[500];
+   char *temp;
+   if (path[strlen(path)-1] ==  '/') {
+     *result = path;
+   } else {
+     strncpy(temppath, path, strlen(path)+1);
+     temp = strrchr(temppath, '/') + 1;
+     *temp = '\0';
+     *result = temppath;
+   }
+   return 0;
+ }
+
+int get_filename (char *path, char **result) {
+  char *temp;
+  if (path[strlen(path)-1] != '/') {
+    temp = strrchr(path, '/') + 1;
+    *result = temp;
+  }
+  return 0;
+}
+
 
 /** \fn strip_ext
     \brief strips the file extension from a filename
@@ -74,18 +105,20 @@ extern int load_graph (char* filename) {
 
 extern int write_graph(igraph_t *graph, char *attr) {
   FILE *fp;
-  char fn[strlen(ug_FILENAME)+1];
+  char fn[strlen(ug_OUTFILE)+1];
   struct stat st = {0};
-  if (stat(ug_OUTPUT, &st) == -1) {
-    mkdir(ug_OUTPUT, 0700);
+  if (stat(ug_OUTPATH, &st) == -1) {
+    mkdir(ug_OUTPATH, 0700);
   }
-  char path[150];
+  char path[250];
   char perc_as_string[3];
   int perc = (int)ug_percent;
-  strncpy(fn, ug_FILENAME, strlen(ug_FILENAME));
-  strip_ext(fn);
+  strncpy(fn, ug_OUTFILE, strlen(ug_OUTFILE)+1);
+  if(strstr(fn, ".") != NULL) {
+    strip_ext(fn);
+  }
   snprintf(perc_as_string, 3, "%d", perc);
-  strncpy(path, ug_OUTPUT, strlen(ug_OUTPUT)+1);
+  strncpy(path, ug_OUTPATH, strlen(ug_OUTPATH)+1);
   strncat(path, fn, (strlen(fn)+1));
   if (ug_quickrun == false) {
     strncat(path, perc_as_string, 3);
@@ -101,10 +134,18 @@ extern int write_graph(igraph_t *graph, char *attr) {
       printf("Writing output to: %s\n", path);
     }
     fp = fopen(path, "w");
-    if (ug_gformat) {
-      igraph_write_graph_gexf(graph, fp, 1);
+    if (fp) {
+      if (ug_gformat) {
+        igraph_write_graph_gexf(graph, fp, 1);
+      } else {
+        igraph_write_graph_graphml(graph, fp, 1);
+      }
     } else {
-      igraph_write_graph_graphml(graph, fp, 1);
+      printf ("\n ERROR: Output path %s could not be accessed. Graphpass", ug_OUTPATH);
+      printf ("\n        cannot create more than one directory in your outpath.");
+      printf ("\n        If you require additional directories, please create them");
+      printf ("\n        before running graphpass.\n\n");
+      exit(EXIT_FAILURE);
     }
     fclose(fp);
   }
