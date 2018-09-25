@@ -132,7 +132,6 @@ int main (int argc, char *argv[]) {
   /* Print any remaining command line arguments (not options). */
   if (optind < argc)
     {
-      printf ("non-option ARGV-elements: ");
       while (optind < argc)
         pushArg(&ug_args, argv[optind++]);
     }
@@ -158,14 +157,19 @@ int main (int argc, char *argv[]) {
   get_directory(FILEPATH, &ug_DIRECTORY);
   ug_DIRECTORY = ug_DIRECTORY ? ug_DIRECTORY : "./";
   if (ug_OUTARG) {
-    printf("OUTARG:%s\n", ug_OUTARG);
     get_filename(ug_OUTARG, &ug_OUTFILE);
     ug_OUTFILE = ug_OUTFILE ? ug_OUTFILE : ug_FILENAME;
     get_directory(ug_OUTARG, &ug_OUTPATH);
-    ug_OUTPATH = ug_OUTPATH ? ug_OUTPATH : "./OUT/";
+    ug_OUTPATH = ug_OUTPATH ? ug_OUTPATH : "./";
   } else {
-    ug_OUTPATH = "./OUT/";
+    ug_OUTPATH = "./";
     ug_OUTFILE = ug_FILENAME;
+  }
+
+  if(ug_OUTFILE == ug_FILENAME && ug_OUTPATH == FILEPATH) {
+    printf ("FAIL >>> Input and output locations cannot be the same.");
+    printf ("FAIL >>> Exiting...\n");
+    exit(EXIT_FAILURE);
   }
 
   /** start output description **/

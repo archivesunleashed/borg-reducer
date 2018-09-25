@@ -37,9 +37,11 @@ int get_directory (char *path, char **result) {
      *result = path;
    } else {
      strncpy(temppath, path, strlen(path)+1);
-     temp = strrchr(temppath, '/') + 1;
-     *temp = '\0';
-     *result = temppath;
+     temp = strpbrk(temppath, "/") ? strrchr(temppath, '/') + 1 : NULL;
+     if (temp) {
+       *temp = '\0';
+     }
+     *result = temp ? temppath : "./";
    }
    return 0;
  }
@@ -47,7 +49,7 @@ int get_directory (char *path, char **result) {
 int get_filename (char *path, char **result) {
   char *temp;
   if (path[strlen(path)-1] != '/') {
-    temp = strrchr(path, '/') + 1;
+    temp = strpbrk(path, "/") ? strrchr(path, '/') + 1 : path;
     *result = temp;
   }
   return 0;
@@ -108,7 +110,9 @@ extern int write_graph(igraph_t *graph, char *attr) {
   char fn[strlen(ug_OUTFILE)+1];
   struct stat st = {0};
   if (stat(ug_OUTPATH, &st) == -1) {
-    mkdir(ug_OUTPATH, 0700);
+    printf(">>> FAILURE - Could not create file at selected output location.\n");
+    printf(">>>         - Ensure that your assigned output folder exists.\n");
+    exit (-1);
   }
   char path[250];
   char perc_as_string[3];
