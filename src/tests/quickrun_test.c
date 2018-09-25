@@ -25,6 +25,7 @@
 #include "graphpass.h"
 
 void setUp() {
+  struct stat st = {0};
   ug_quickrun = true;
   ug_save = false;
   ug_FILENAME = "cpp2.graphml";
@@ -33,6 +34,9 @@ void setUp() {
   ug_DIRECTORY = "src/resources/";
   ug_OUTFILE = ug_FILENAME;
   ug_gformat = false;
+  if (stat(ug_OUTPATH, &st) == -1) {
+    mkdir(ug_OUTPATH, 0700);
+  }
 }
 
 void TEST_QUICKRUN_NOSAVE() {
