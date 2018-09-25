@@ -165,9 +165,9 @@ int main (int argc, char *argv[]) {
     ug_OUTPATH = "./";
     ug_OUTFILE = ug_FILENAME;
   }
-
-  if(ug_OUTFILE == ug_FILENAME && ug_OUTPATH == FILEPATH) {
-    printf ("FAIL >>> Input and output locations cannot be the same.");
+  
+  if(strcmp(ug_OUTFILE, ug_FILENAME) == 0 && strcmp(ug_OUTPATH, ug_DIRECTORY) == 0) {
+    printf ("FAIL >>> Input and output locations cannot be the same.\n");
     printf ("FAIL >>> Exiting...\n");
     exit(EXIT_FAILURE);
   }
