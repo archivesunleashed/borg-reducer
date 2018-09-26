@@ -38,13 +38,13 @@ debug: ./src/main/graphpass.c
 test: qp ana io run clean
 
 qp: $(TEST_INCLUDE)runner_test_qp.c
-	gcc -g $(UNITY_INCLUDE)/unity.c $(TEST_INCLUDE)runner_test_qp.c $(DEPS) $(TEST_INCLUDE)quickrun_test.c $(HELPER_FILES) -L$(IGRAPH_LIB) -ligraph -lm -o qp
+	gcc $(UNITY_INCLUDE)/unity.c $(TEST_INCLUDE)runner_test_qp.c $(DEPS) $(TEST_INCLUDE)quickrun_test.c $(HELPER_FILES) -L$(IGRAPH_LIB) -ligraph -lm -o qp
 
 ana: $(TEST_INCLUDE)runner_test_ana.c
-	gcc -g $(UNITY_INCLUDE)/unity.c $(TEST_INCLUDE)runner_test_ana.c $(DEPS) $(TEST_INCLUDE)analyze_test.c $(HELPER_FILES) -L$(IGRAPH_LIB) -ligraph -lm -o ana
+	gcc $(UNITY_INCLUDE)/unity.c $(TEST_INCLUDE)runner_test_ana.c $(DEPS) $(TEST_INCLUDE)analyze_test.c $(HELPER_FILES) -L$(IGRAPH_LIB) -ligraph -lm -o ana
 
 io: $(TEST_INCLUDE)runner_test_io.c
-	gcc -g $(UNITY_INCLUDE)/unity.c $(TEST_INCLUDE)runner_test_io.c $(DEPS) $(TEST_INCLUDE)io_test.c $(HELPER_FILES) -L$(IGRAPH_LIB) -ligraph -lm -o io
+	gcc $(UNITY_INCLUDE)/unity.c $(TEST_INCLUDE)runner_test_io.c $(DEPS) $(TEST_INCLUDE)io_test.c $(HELPER_FILES) -L$(IGRAPH_LIB) -ligraph -lm -o io
 
 run:
 	- ./ana

@@ -29,7 +29,7 @@
 int get_directory (char *path, char **result) {
   if (strlen(path) > 499){
     printf("ERROR: Maximum characters in an outpath is 500.\n");
-    exit(EXIT_FAILURE);
+    return(1);
   }
    static char temppath[500];
    char *temp;
@@ -54,7 +54,6 @@ int get_filename (char *path, char **result) {
   }
   return 0;
 }
-
 
 /** \fn strip_ext
     \brief strips the file extension from a filename
