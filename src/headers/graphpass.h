@@ -91,6 +91,11 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis */
 #define MAX_USER_EDGES 1000000000
 #define MAX_USER_NODES 1000000000
 
+/* For test suite */
+#define TEST_ARRAY_LENGTH 3 // update as you add test examples.
+#define TEST_MAX_STRING_SIZE 22
+#define TEST_FILENAME_SIZE 9
+
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
 struct Argument {

@@ -25,13 +25,10 @@
 #include <math.h>
 
 // Constants
-const int ARRAY_LENGTH = 3; // update as you add test examples.
-const int MAX_STRING_SIZE = 22;
-const int FILENAME_SIZE = 9;
-char samp[ARRAY_LENGTH][MAX_STRING_SIZE] = {
+char samp[TEST_ARRAY_LENGTH][TEST_MAX_STRING_SIZE] = {
   "/path/to/a/directory/",
   "/path/to/a/file.ext",
-  "file.ext"}, path[MAX_STRING_SIZE];
+  "file.ext"}, path[TEST_MAX_STRING_SIZE];
 
 void setUp(void) {
 }
@@ -40,11 +37,11 @@ void tearDown(void) {
 }
 
 void TEST_GET_DIRECTORY() {
-  char expected[ARRAY_LENGTH][MAX_STRING_SIZE] = {
+  char expected[TEST_ARRAY_LENGTH][TEST_MAX_STRING_SIZE] = {
     "/path/to/a/directory/",
     "/path/to/a/",
-    "./"}, path[MAX_STRING_SIZE];
-  for (int i=0; i < ARRAY_LENGTH; i++) {
+    "./"}, path[TEST_MAX_STRING_SIZE];
+  for (int i=0; i < TEST_ARRAY_LENGTH; i++) {
     char *expect;
     get_directory(samp[i], &expect);
     TEST_ASSERT_EQUAL_STRING(expect, expected[i]);
@@ -52,8 +49,8 @@ void TEST_GET_DIRECTORY() {
 }
 
 void TEST_GET_FILE() {
-  for (int i=ARRAY_LENGTH-1; i < 0; i--) {
-    char expect[FILENAME_SIZE] = "file.ext";
+  for (int i=TEST_ARRAY_LENGTH-1; i < 0; i--) {
+    char expect[TEST_FILENAME_SIZE] = "file.ext";
     char *result;
     get_filename(samp[i], &result);
     if (i > 0) {
@@ -65,7 +62,7 @@ void TEST_GET_FILE() {
 }
 
 void TEST_STRIP_EXT() {
-  char expect[FILENAME_SIZE] = "file.ext";
+  char expect[TEST_FILENAME_SIZE] = "file.ext";
   char result[5] = "file";
   strip_ext(expect);
   TEST_ASSERT_EQUAL_STRING(&expect, result);
