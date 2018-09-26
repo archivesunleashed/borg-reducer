@@ -22,7 +22,7 @@ INCLUDE = ./src/headers
 DEPS = -I$(INCLUDE) -I$(IGRAPH_INCLUDE) -I$(UNITY_INCLUDE)
 BUILD = build/
 
-all: test install
+all: clean test install
 
 install: src/main/graphpass.c
 	gcc src/main/*.c $(DEPS) -L$(IGRAPH_LIB) -ligraph -lm -o graphpass
