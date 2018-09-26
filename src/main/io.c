@@ -81,7 +81,7 @@ extern int load_graph (char* filename) {
   fp = fopen(filename, "r");
   if (fp == 0) {
     printf(">>> FAILURE - Could not find graphML file at filepath location.\n");
-    exit (-1);
+    return (-1);
   }
   igraph_read_graph_graphml(&g, fp, 0);
   NODESIZE = igraph_vcount(&g);
@@ -112,7 +112,7 @@ extern int write_graph(igraph_t *graph, char *attr) {
   if (stat(ug_OUTPATH, &st) == -1) {
     printf(">>> FAILURE - Could not create file at selected output location.\n");
     printf(">>>         - Ensure that your assigned output folder exists.\n");
-    exit (-1);
+    return (-1);
   }
   char path[250];
   char perc_as_string[3];
@@ -149,7 +149,7 @@ extern int write_graph(igraph_t *graph, char *attr) {
       printf ("\n        cannot create more than one directory in your outpath.");
       printf ("\n        If you require additional directories, please create them");
       printf ("\n        before running graphpass.\n\n");
-      exit(EXIT_FAILURE);
+      return(-1);
     }
     fclose(fp);
   }
