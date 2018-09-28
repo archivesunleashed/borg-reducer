@@ -154,7 +154,7 @@ int igraph_write_graph_gexf(const igraph_t *graph, FILE *outstream,
 igraph_real_t mean_vector (igraph_vector_t *v1);
 igraph_real_t variance_vector (igraph_vector_t *v1);
 igraph_real_t std_vector(igraph_vector_t *v1);
-igraph_real_t stderror_vector(igraph_vector_t *v1);
+igraph_real_t std_error_vector(igraph_vector_t *v1);
 igraph_real_t t_stat_vector(igraph_vector_t *v1);
 igraph_real_t t_test_vector(igraph_vector_t *v1, igraph_real_t df);
 

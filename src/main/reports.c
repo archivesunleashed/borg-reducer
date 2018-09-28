@@ -67,14 +67,12 @@ int rankCompare(igraph_t *g1, igraph_t *g2, char* attr, igraph_real_t* result_pv
   strncat(attribute, "Rank", 5);
   bool first = (igraph_vcount(g1) < igraph_vcount(g2));
   if (first){
-    printf("first");
     igraph_vector_init(&rank2, igraph_vcount(g1));
     igraph_vector_init(&rank1, igraph_vcount(g1));
     //idRefs should be shrunk to smaller size;
     igraph_vector_init(&idRef1, igraph_vcount(g2));
     igraph_vector_init(&idRef2, igraph_vcount(g1));
     igraph_vector_init(&checkRef, igraph_vcount(g1));
-    printf("Get attribute");
     VANV(g1, attribute, &rank2);
     VANV(g2, "idRef", &idRef1);
     VANV(g1, "idRef", &idRef2);
@@ -120,7 +118,7 @@ int rankCompare(igraph_t *g1, igraph_t *g2, char* attr, igraph_real_t* result_pv
 /** Writes the report **/
 int write_report(igraph_t *graph) {
   if (ug_quickrun == true) { /*< QUICKRUN does not write a report */
-    printf("No reports available for quickrun\n");
+    fprintf(stderr, "No reports available for quickrun\n");
     exit(0);
   }
   printf("Write report ... \n");

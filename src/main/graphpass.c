@@ -167,8 +167,8 @@ int main (int argc, char *argv[]) {
   }
 
   if(strcmp(ug_OUTFILE, ug_FILENAME) == 0 && strcmp(ug_OUTPATH, ug_DIRECTORY) == 0) {
-    printf ("FAIL >>> Input and output locations cannot be the same.\n");
-    printf ("FAIL >>> Exiting...\n");
+    fprintf(stderr, "FAIL >>> Input and output locations cannot be the same.\n");
+    fprintf(stderr, "FAIL >>> Exiting...\n");
     exit(EXIT_FAILURE);
   }
 
@@ -187,13 +187,13 @@ int main (int argc, char *argv[]) {
   }
   int load = load_graph(FILEPATH);
   if (load != 0) {
-    printf("FAIL >>> Graphpass could not load the graph.");
+    fprintf(stderr, "FAIL >>> Graphpass could not load the graph.");
     exit(EXIT_FAILURE);
   }
   if (igraph_vcount(&g) > ug_maxnodes || igraph_ecount(&g) > ug_maxedges){
-    printf ("FAIL >>> Graphpass can only conduct analysis on graphs with \
+    fprintf(stderr, "FAIL >>> Graphpass can only conduct analysis on graphs with \
 fewer than %li nodes and %li edges.\n", ug_maxnodes, ug_maxedges);
-    printf ("FAIL >>> Exiting...\n");
+    fprintf(stderr, "FAIL >>> Exiting...\n");
     exit(EXIT_FAILURE);
   }
 
