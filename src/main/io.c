@@ -28,7 +28,9 @@
  */
 int get_directory (char *path, char **result) {
   if (strlen(path) > 499){
-    fprintf(stderr, "ERROR: Maximum characters in an outpath is 500.\n");
+    if (!ug_TEST) {
+      fprintf(stderr, "ERROR: Maximum characters in an outpath is 500.\n");
+    }
     return(1);
   }
    static char temppath[500];
@@ -79,7 +81,9 @@ extern int load_graph (char* filename) {
   FILE *fp;
   fp = fopen(filename, "r");
   if (fp == 0) {
-    fprintf(stderr, ">>> FAILURE - Could not find graphML file at filepath location.\n");
+    if (!ug_TEST) {
+      fprintf(stderr, ">>> FAILURE - Could not find graphML file at filepath location.\n");
+    }
     return (-1);
   }
   igraph_read_graph_graphml(&g, fp, 0);
@@ -109,8 +113,10 @@ extern int write_graph(igraph_t *graph, char *attr) {
   char fn[strlen(ug_OUTFILE)+1];
   struct stat st = {0};
   if (stat(ug_OUTPATH, &st) == -1) {
-    fprintf(stderr, ">>> FAILURE - Could not create file at selected output location.\n");
-    fprintf(stderr, ">>>         - Ensure that your assigned output folder exists.\n");
+    if (!ug_TEST) {
+      fprintf(stderr, ">>> FAILURE - Could not create file at selected output location.\n");
+      fprintf(stderr, ">>>         - Ensure that your assigned output folder exists.\n");
+    }
     return (-1);
   }
   char path[250];
@@ -144,10 +150,12 @@ extern int write_graph(igraph_t *graph, char *attr) {
         igraph_write_graph_graphml(graph, fp, 1);
       }
     } else {
-      fprintf (stderr, "\n ERROR: Output path %s could not be accessed. Graphpass", ug_OUTPATH);
-      fprintf (stderr, "\n        cannot create more than one directory in your outpath.");
-      fprintf (stderr, "\n        If you require additional directories, please create them");
-      fprintf (stderr, "\n        before running graphpass.\n\n");
+      if (!ug_TEST) {
+        fprintf (stderr, "\n ERROR: Output path %s could not be accessed. Graphpass", ug_OUTPATH);
+        fprintf (stderr, "\n        cannot create more than one directory in your outpath.");
+        fprintf (stderr, "\n        If you require additional directories, please create them");
+        fprintf (stderr, "\n        before running graphpass.\n\n");
+      }
       return(-1);
     }
     fclose(fp);

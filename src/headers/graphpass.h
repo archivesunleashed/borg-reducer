@@ -46,9 +46,10 @@ char* ug_methods;  /**< METHODS to filter */
 char* ug_OUTPATH; /**< Path to output folder */
 char* ug_OUTPUT; /**< Filename extracted from outpath, if it exists. */
 char* ug_OUTARG; /**< Filepath entered as ARG */
-char* ug_DIRECTORY; /**< Directory extracted from ug_PATH */
-igraph_integer_t NODESIZE; /**< Number of Nodes in original graph */
-igraph_integer_t EDGESIZE; /**< Number of Edges in original graph */
+char* ug_DIRECTORY; /**< Directory extracted from ug_PATH. */
+bool ug_TEST; /**< Flags a test (ignores some expected FAIL messages). */
+igraph_integer_t NODESIZE; /**< Number of Nodes in original graph. */
+igraph_integer_t EDGESIZE; /**< Number of Edges in original graph. */
 float ug_percent; /**< Filtering percentage 0.0 by default */
 long ug_maxnodes; /**< user-defined max nodes for processing, default MAX_NODES */
 long ug_maxedges; /**< user-defined maxiumum edges for processing default MAX_EDGES */

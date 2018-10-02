@@ -118,7 +118,9 @@ int rankCompare(igraph_t *g1, igraph_t *g2, char* attr, igraph_real_t* result_pv
 /** Writes the report **/
 int write_report(igraph_t *graph) {
   if (ug_quickrun == true) { /*< QUICKRUN does not write a report */
-    fprintf(stderr, "No reports available for quickrun\n");
+    if (!ug_TEST) {
+      fprintf(stderr, "No reports available for quickrun\n");
+    }
     exit(0);
   }
   printf("Write report ... \n");

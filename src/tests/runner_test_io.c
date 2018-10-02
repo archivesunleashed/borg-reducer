@@ -56,6 +56,7 @@ void resetTest(void)
 }
 
 int main (void) {
+  ug_TEST = true;
   UnityBegin("src/tests/io_test.c");
   RUN_TEST(TEST_GET_DIRECTORY, 43);
   RUN_TEST(TEST_GET_FILE, 55);

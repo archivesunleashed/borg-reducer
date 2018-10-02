@@ -47,6 +47,9 @@ bool ug_report = false;
 bool ug_quickrun = false;
 /** Print out helper messages **/
 bool ug_verbose = false;
+/** Not a test file */
+bool ug_TEST = false;
+
 const char hyphen = '-';
 
 int main (int argc, char *argv[]) {
@@ -166,7 +169,8 @@ int main (int argc, char *argv[]) {
     ug_OUTFILE = ug_FILENAME;
   }
 
-  if(strcmp(ug_OUTFILE, ug_FILENAME) == 0 && strcmp(ug_OUTPATH, ug_DIRECTORY) == 0) {
+  if(strcmp(ug_OUTFILE, ug_FILENAME) == 0
+    && strcmp(ug_OUTPATH, ug_DIRECTORY) == 0) {
     fprintf(stderr, "FAIL >>> Input and output locations cannot be the same.\n");
     fprintf(stderr, "FAIL >>> Exiting...\n");
     exit(EXIT_FAILURE);

@@ -56,7 +56,7 @@ void resetTest(void)
 }
 
 int main (void) {
-  
+  ug_TEST = true;
   load_graph("src/resources/cpp2.graphml");
   UnityBegin("src/tests/quickrun_test.c");
   RUN_TEST(TEST_QUICKRUN_NOSAVE, 22);
