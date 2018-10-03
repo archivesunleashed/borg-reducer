@@ -75,9 +75,9 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis. */
 
 /* Visualization Presets. */
 
-#define VIZ_SET_SPACIOUS. "viz_spacious.h"
-#define VIZ_SET_LARGE. "viz_large.h"
-#define VIZ_SET_SMALL. "vis_small.h"
+#define VIZ_SET_SPACIOUS "viz_spacious.h"
+#define VIZ_SET_LARGE "viz_large.h"
+#define VIZ_SET_SMALL "vis_small.h"
 
 /* Default Settings. */
 #define MAX_METHODS 9
