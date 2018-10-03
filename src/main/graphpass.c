@@ -21,34 +21,34 @@
 
  Graphpass accepts a file, a percentage and a series of characters that represent
  methods of filtering a network graph, and outputs new graph files with the filtered
- graphs and optionally, a report showing how those filters affected the graph
+ graphs and optionally, a report showing how those filters affected the graph.
  */
-
 
 #define _GNU_SOURCE
 #define ASSETS_PATH "src/resources"
 #define MAX_METHODS 9
 #define MAX_FILESIZE 100
 
-
 #include "igraph.h"
 #include <stdlib.h>
 #include "graphpass.h"
 
-char* FILEPATH; /**< The filepath (ug_DIRECTORY + ug_FILENAME) */
+char* FILEPATH; /**< The filepath (ug_DIRECTORY + ug_FILENAME). */
 
-/** Whether to save the graph **/
+/** Whether to save the graph. **/
 bool ug_save = true;
-/** Graph format true for GEXF; false for GRAPHML **/
+/** Graph format true for GEXF; false for GRAPHML. **/
 bool ug_gformat = false;
-/** Produce a report analyzing effect of filtering on graph **/
+/** Produce a report analyzing effect of filtering on graph. **/
 bool ug_report = false;
-/** Provide a quickrun with simple sizing, positioning and coloring **/
+/** Provide a quickrun with simple sizing, positioning and coloring. **/
 bool ug_quickrun = false;
-/** Print out helper messages **/
+/** Print out helper messages. **/
 bool ug_verbose = false;
-/** Not a test file */
+/** Not a test file. */
 bool ug_TEST = false;
+/** Concluding error msg. */
+int conclude;
 
 const char hyphen = '-';
 
@@ -58,14 +58,14 @@ int main (int argc, char *argv[]) {
     {
       static struct option long_options[] =
         {
-          /* These options have no required argument */
+          /* These options have no required argument. */
           {"gexf",    no_argument,       0, 'g'},
           {"no-save", no_argument,       0, 'n'},
           {"quick",   no_argument,       0, 'q'},
           {"report",  no_argument,       0, 'r'},
           {"verbose", no_argument,       0, 'v'},
 
-          /* These options require an argument */
+          /* These options require an argument. */
           {"input", required_argument, 0, 'i'},
           {"methods", required_argument, 0, 'm'},
           {"output",  required_argument, 0, 'o'},
@@ -85,7 +85,7 @@ int main (int argc, char *argv[]) {
       switch (c)
         {
         case 0:
-          /* If this option set a flag, do nothing else now. */
+          /* If this option sets a flag, do nothing else now. */
           if (long_options[option_index].flag != 0)
             break;
         case 'n':
@@ -139,7 +139,7 @@ int main (int argc, char *argv[]) {
         pushArg(&ug_args, argv[optind++]);
     }
 
-  /** set default values if not included in flags **/
+  /** Set default values if not included in flags. **/
   if (ug_args) {
     ug_OUTARG = ug_args->val;
     if (ug_args->next) {
@@ -153,6 +153,7 @@ int main (int argc, char *argv[]) {
   ug_maxedges = ug_maxedges ? ug_maxedges : MAX_EDGES;
   ug_percent = ug_percent ? ug_percent : 0.00;
   ug_methods = ug_methods ? ug_methods : "d";
+  /** Setup directory path and filenames. **/
   FILEPATH = ug_INPUT ? ug_INPUT : ug_PATH;
   FILEPATH = FILEPATH ? FILEPATH : "src/resources/cpp2.graphml";
   get_filename(FILEPATH, &ug_FILENAME);
@@ -161,6 +162,8 @@ int main (int argc, char *argv[]) {
   ug_DIRECTORY = ug_DIRECTORY ? ug_DIRECTORY : "./";
   if (ug_OUTARG) {
     get_filename(ug_OUTARG, &ug_OUTFILE);
+    // If OUTPATH and FILEPATH are the same, this could overwrite original file.
+    // Checks follow below.
     ug_OUTFILE = ug_OUTFILE ? ug_OUTFILE : ug_FILENAME;
     get_directory(ug_OUTARG, &ug_OUTPATH);
     ug_OUTPATH = ug_OUTPATH ? ug_OUTPATH : "./";
@@ -168,7 +171,7 @@ int main (int argc, char *argv[]) {
     ug_OUTPATH = "./";
     ug_OUTFILE = ug_FILENAME;
   }
-
+  // Prevent output from destroying original file.
   if(strcmp(ug_OUTFILE, ug_FILENAME) == 0
     && strcmp(ug_OUTPATH, ug_DIRECTORY) == 0) {
     fprintf(stderr, "FAIL >>> Input and output locations cannot be the same.\n");
@@ -176,7 +179,7 @@ int main (int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  /** start output description **/
+  /** Start output description. **/
   if (ug_verbose == true) {
     printf(">>>>>>>  GRAPHPASSING >>>>>>>> \n");
     printf("FILEPATH: %s\n", FILEPATH);
@@ -185,7 +188,7 @@ int main (int argc, char *argv[]) {
     printf("QUICKRUN: %i\nREPORT: %i\nSAVE: %i\n", ug_quickrun, ug_report, ug_save);
   }
 
-  /** set up FILEPATH to access graphml file **/
+  /** Set up FILEPATH to access graphml file. **/
   if (ug_verbose == true) {
     printf("Running graphpass on file: %s\n", FILEPATH);
   }
@@ -201,9 +204,13 @@ fewer than %li nodes and %li edges.\n", ug_maxnodes, ug_maxedges);
     exit(EXIT_FAILURE);
   }
 
-  /** start the filtering based on values and methods **/
-  filter_graph();
-  printf("\n\n>>>>  SUCCESS!");
+  /** Start the filtering based on values and methods. **/
+  conclude = filter_graph();
+  if (conclude == 0) {
+    printf("\n\n>>>>  SUCCESS!");
+  } else {
+    fprintf(stderr, ">>>>  FAIL - an unknown error occurred during run.");
+  }
   if (ug_save) {
     printf("- Files output to %s\n", ug_OUTPATH);
   }

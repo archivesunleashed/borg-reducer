@@ -86,7 +86,7 @@ Then
 
 ```
 cd graphpass
-make clean all
+make
 ```
 
 ## Usage
@@ -99,16 +99,16 @@ Once compiled use the following command:
 
 The following flags are available:
 
-* `--input {FILEPATH} or -i` - The filepath of the file to run Graphpass on. If not set, `graphpass` will use
+* `--input {FILEPATH} or -i` - The filepath of the file to run GraphPass on. If not set, GraphPass will use
 a default network in `src/resources`. This will override the value in `{INPUT PATH}`.
-* `--output {FILEPATH} or -o` - The filepath for outputs, overriding `{OUTPUT PATH}`. If the output path contains a filename, Graphpass will use that, otherwise it will default to the filename provided in `{INPUT PATH}`. Unless the quickpass (`-q`) is selected, the filename will also be altered to show the percentage filtered from the graph and the method used.
-* `--percent {PERCENT} or -p` - a percentage to remove from the file.  By default this is 0.0.
+* `--output {FILEPATH} or -o` - The filepath for outputs, overriding `{OUTPUT PATH}`. If the output path contains a filename, GraphPass will use that, otherwise it will default to the filename provided in `{INPUT PATH}`. Unless the quickpass (`-q`) is selected, the filename will also be altered to show the percentage filtered from the graph and the method used.
+* `--percent {PERCENT} or -p` - a percentage to remove from the file. By default this is 0.0.
 * `--method {options} or -m` - a string of various methods through which to filter the
 graph.
-* `--quick or -q` - Graphpass will run a basic set of algorithms for visualization with no filtering. The filename will be the same as the input filename.
-* `--gexf or -g` - Graphpass will return the graph output in gexf (good for SigmaJS) instead of graphml.
-* `--max-nodes {Value}` - Change default maximum number of nodes that graphpass will accept. By default this is 50,000. Values larger than 50k may cause graphpass to use up a computer's memory.
-* `--max-edges {Value}` - Change default maximum number of edges that graphpass will accept. By default this is 500,000. Values larger than 500k are unlikely to cause significant delays in computation time, but could result in memory issue upon visualization in Gephi or SigmaJS.
+* `--quick or -q` - GraphPass will run a basic set of algorithms for visualization with no filtering. The filename will be the same as the input filename.
+* `--gexf or -g` - GraphPass will return the graph output in gexf (good for SigmaJS) instead of graphml.
+* `--max-nodes {Value}` - Change default maximum number of nodes that GraphPass will accept. By default this is 50,000. Values larger than 50k may cause GraphPass to use up a computer's memory.
+* `--max-edges {Value}` - Change default maximum number of edges that GraphPass will accept. By default this is 500,000. Values larger than 500k are unlikely to cause significant delays in computation time, but could result in memory issue upon visualization in Gephi or SigmaJS.
 
 These various methods are outlined below:
 
@@ -125,10 +125,10 @@ These various methods are outlined below:
 For example:
 
 ```
-./graphpass /path/to/links-for-gephi.graphml --percent 10 --methods b /path/to/OUT/file
+./graphpass /path/to/links-for-gephi.graphml --percent 10 --methods b /path/to/output_filename
 ```
 
-Will remove 10% of the graph using betweenness as a cutting measure and lay the network out. It will find `links-for-gephi.graphml` file in `path/to` and output a new one to `/path/to/OUT` (titled `fileBetweenness.graphml`).
+Will remove 10% of the graph using betweenness as a cutting measure and lay the network out. It will find `links-for-gephi.graphml` file in `path/to/input` and output a new one to `/path/to/output_filename.graphml` (titled `output_filename10Betweenness.graphml`).
 
 # Optional arguments
 
@@ -137,7 +137,7 @@ Will remove 10% of the graph using betweenness as a cutting measure and lay the 
 
 # Troubleshooting
 
-It is possible that you can get a "error while loading shared libraries" error in Linux.  If so, try running `sudo ldconfig` to set the libraries path for your local installation of igraph.
+It is possible that you can get a "error while loading shared libraries" error in Linux. If so, try running `sudo ldconfig` to set the libraries path for your local installation of igraph.
 
 # License
 

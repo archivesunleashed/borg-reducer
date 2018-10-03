@@ -25,6 +25,7 @@
 /** \fn get_directory
     \brief gets the directory from a path (not using libgen)
     @param path - path to extract the directory
+    @param result - empty string pointer to put the result.
  */
 int get_directory (char *path, char **result) {
   if (strlen(path) > 499){
@@ -47,7 +48,11 @@ int get_directory (char *path, char **result) {
    }
    return 0;
  }
-
+ /** \fn get_filename
+     \brief gets the filename from a path (not using libgen)
+     @param path - path to extract the directory
+     @param result - empty string pointer to place the result.
+  */
 int get_filename (char *path, char **result) {
   char *temp;
   if (path[strlen(path)-1] != '/') {
