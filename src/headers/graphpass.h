@@ -39,7 +39,7 @@ igraph_attribute_table_t att;
 
 char* ug_OUT; /**< A FILEPATH called using -o flag. */
 char* ug_OUTFILE; /**< A FILENAME for outputting. */
-char* ug_INPUT; /** A FILEPATH called using -i flag. */
+char* ug_INPUT; /**< A FILEPATH called using -i flag. */
 char* ug_FILENAME; /**< FILENAME extracted from stdin path. */
 char* ug_PATH; /**< Directory path extracted from stdin path. */
 char* ug_methods;  /**< METHODS to filter. */
@@ -92,7 +92,7 @@ igraph_vector_t WEIGHTED; /**< If greater than 0, conducts weighted analysis. */
 #define MAX_USER_EDGES 1000000000
 #define MAX_USER_NODES 1000000000
 
-/* For test suite */
+/* For test suite. */
 #define TEST_ARRAY_LENGTH 3 // Update as you add test examples.
 #define TEST_MAX_STRING_SIZE 22
 #define TEST_FILENAME_SIZE 9

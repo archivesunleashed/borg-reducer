@@ -29,7 +29,7 @@
  @brief Holds graph level values for each graph that has been filtered.
  */
 
-/** adds a new value to a Node **/
+/** Adds a new value to a Node. **/
 int push(struct Node** head_ref, igraph_real_t value, char* attr)
 {
   struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
@@ -39,7 +39,7 @@ int push(struct Node** head_ref, igraph_real_t value, char* attr)
   (*head_ref) = new_node;
   return 0;
 }
-/** adds a new value to a RankNode **/
+/** Adds a new value to a RankNode. **/
 int pushRank (struct RankNode** head_ref, int rankids[20]) {
   struct RankNode* new_node = (struct RankNode*) malloc(sizeof(struct RankNode));
   for (int i=0; i<20; i++) {
@@ -50,7 +50,7 @@ int pushRank (struct RankNode** head_ref, int rankids[20]) {
   return 0;
 }
 
-/** adds a new value to Argument **/
+/** Adds a new value to argument. **/
 int pushArg (struct Argument** arg, char *value) {
   struct Argument* newArg = (struct Argument*) malloc(sizeof(struct Argument));
   newArg->val = value;
@@ -59,7 +59,7 @@ int pushArg (struct Argument** arg, char *value) {
   return 0;
 }
 
-/** Does a rank-order test on two graphs, bassed on attribute **/
+/** Does a rank-order test on two graphs, based on attribute. **/
 int rankCompare(igraph_t *g1, igraph_t *g2, char* attr, igraph_real_t* result_pv, igraph_real_t* result_ts ) {
   igraph_vector_t rank1, rank2, idRef1, idRef2, checkRef;
   char attribute[strlen(attr) + 5];
@@ -115,7 +115,7 @@ int rankCompare(igraph_t *g1, igraph_t *g2, char* attr, igraph_real_t* result_pv
 }
 
 
-/** Writes the report **/
+/** Writes the report. **/
 int write_report(igraph_t *graph) {
   if (ug_quickrun == true) { /*< QUICKRUN does not write a report */
     if (!ug_TEST) {
