@@ -9,9 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: where am i
+        run: pwd
       - name: Install dependencies
         run: |
-          pwd
           sudo apt-get install -qq gcc-7 g++-7
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7
           sudo update-alternatives --config gcc
