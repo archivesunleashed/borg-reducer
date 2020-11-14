@@ -20,6 +20,6 @@ jobs:
           cd /home/runner/work/graphpass/graphpass
           make
           gcov *.gcno
-          ./graphass
+          ./graphpass
       - name: Upload coverage report to Codecov
         run: bash <(curl -s https://codecov.io/bash)
